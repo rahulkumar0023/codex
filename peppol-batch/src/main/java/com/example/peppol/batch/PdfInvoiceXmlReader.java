@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationFileAttachment;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.springframework.batch.item.ItemReader;
 
 /**
@@ -48,11 +48,13 @@ public class PdfInvoiceXmlReader implements ItemReader<InvoiceDocument> {
 
     private String extractInvoiceXml(Path pdf) {
         try (PDDocument document = PDDocument.load(pdf.toFile())) {
-            // Look for file attachment annotations
-            for (PDAnnotationFileAttachment attachment : document.getDocumentCatalog().getPage(0).getAnnotationsByType(PDAnnotationFileAttachment.class)) {
-                String filename = attachment.getFile().getFilename();
-                if (filename != null && filename.toLowerCase().endsWith(".xml")) {
-                    return new String(attachment.getFile().toByteArray(), StandardCharsets.UTF_8);
+            PDPage firstPage = document.getPage(0);
+            for (PDAnnotation annotation : firstPage.getAnnotations()) {
+                if (annotation instanceof PDAnnotationFileAttachment attachment) {
+                    String filename = attachment.getFile().getFilename();
+                    if (filename != null && filename.toLowerCase().endsWith(".xml")) {
+                        return new String(attachment.getFile().toByteArray(), StandardCharsets.UTF_8);
+                    }
                 }
             }
         } catch (IOException e) {
