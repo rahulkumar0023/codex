@@ -1,8 +1,6 @@
 package com.example.peppol.batch;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -39,7 +37,7 @@ public class BatchConfig {
 
     @Bean
     public ItemReader<InvoiceDocument> reader() {
-        return new PdfInvoiceXmlReader(Path.of("input"));
+        return new InvoiceXmlFileReader(Path.of("input"));
     }
 
     @Bean
