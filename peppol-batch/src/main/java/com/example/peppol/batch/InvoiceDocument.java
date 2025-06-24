@@ -7,18 +7,18 @@ import java.nio.file.Path;
  */
 public class InvoiceDocument {
     private final String xml;
-    private final Path sourcePdf;
+    private final Path sourceFile;
 
-    public InvoiceDocument(String xml, Path sourcePdf) {
+    public InvoiceDocument(String xml, Path sourceFile) {
         this.xml = xml;
-        this.sourcePdf = sourcePdf;
+        this.sourceFile = sourceFile;
     }
 
     public String getXml() {
         return xml;
     }
 
-    public Path getSourcePdf() {
-        return sourcePdf;
+    public Path getSourceFile() {
+        return sourceFile;
     }
 }
