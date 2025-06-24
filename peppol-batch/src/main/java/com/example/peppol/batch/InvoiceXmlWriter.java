@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
 /**
@@ -25,7 +26,7 @@ public class InvoiceXmlWriter implements ItemWriter<InvoiceDocument> {
     }
 
     @Override
-    public void write(List<? extends InvoiceDocument> items) throws Exception {
+    public void write(Chunk<? extends InvoiceDocument> items) throws Exception {
         for (InvoiceDocument doc : items) {
             Path input = doc.getSourceFile();
             String fileName = input.getFileName().toString();
@@ -35,4 +36,5 @@ public class InvoiceXmlWriter implements ItemWriter<InvoiceDocument> {
             Files.writeString(out, doc.getXml(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         }
     }
+
 }

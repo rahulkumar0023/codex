@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
+import org.apache.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationFileAttachment;
 import org.springframework.batch.item.ItemReader;
@@ -49,17 +51,30 @@ public class PdfInvoiceXmlReader implements ItemReader<InvoiceDocument> {
     private String extractInvoiceXml(Path pdf) {
         try (PDDocument document = PDDocument.load(pdf.toFile())) {
             PDPage firstPage = document.getPage(0);
+
             for (PDAnnotation annotation : firstPage.getAnnotations()) {
                 if (annotation instanceof PDAnnotationFileAttachment attachment) {
-                    String filename = attachment.getFile().getFilename();
-                    if (filename != null && filename.toLowerCase().endsWith(".xml")) {
-                        return new String(attachment.getFile().toByteArray(), StandardCharsets.UTF_8);
+
+                    // Cast to PDComplexFileSpecification
+                    if (attachment.getFile() instanceof PDComplexFileSpecification fileSpec) {
+                        String filename = fileSpec.getFile();  // Correct method to get the filename
+
+                        if (filename != null && filename.toLowerCase().endsWith(".xml")) {
+                            PDEmbeddedFile embeddedFile = fileSpec.getEmbeddedFile();
+
+                            if (embeddedFile != null) {
+                                return new String(embeddedFile.toByteArray(), StandardCharsets.UTF_8);
+                            }
+                        }
                     }
                 }
             }
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to read PDF " + pdf, e);
         }
+
         return null;
     }
+
 }
