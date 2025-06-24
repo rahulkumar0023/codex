@@ -27,8 +27,10 @@ public class InvoiceXmlWriter implements ItemWriter<InvoiceDocument> {
     @Override
     public void write(List<? extends InvoiceDocument> items) throws Exception {
         for (InvoiceDocument doc : items) {
-            Path pdf = doc.getSourcePdf();
-            String baseName = pdf.getFileName().toString().replaceFirst("\\.pdf$", "");
+            Path input = doc.getSourceFile();
+            String fileName = input.getFileName().toString();
+            int idx = fileName.lastIndexOf('.');
+            String baseName = idx >= 0 ? fileName.substring(0, idx) : fileName;
             Path out = outputDir.resolve(baseName + ".xml");
             Files.writeString(out, doc.getXml(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         }

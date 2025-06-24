@@ -1,6 +1,6 @@
 # Codex
 
-This repository contains a sample Spring Batch project for extracting embedded PEPPOL invoice XML files from PDF invoices. The batch job reads PDF files in the `input` directory and writes the extracted XML files to the `output` directory.
+This repository contains a sample Spring Batch project for processing PEPPOL UBL invoices. The batch job reads XML invoice files from the `input` directory and writes them unchanged to the `output` directory. The XML structure follows the PEPPOL UBL 2.1 specification.
 
 ## Building
 
@@ -11,12 +11,20 @@ cd peppol-batch
 mvn package
 ```
 
+## Testing
+
+Run the unit tests with Maven:
+
+```bash
+mvn test
+```
+
 ## Running the batch job
 
-Place your PDF invoices under the `input` directory, then run the job using:
+Place your PEPPOL XML invoices under the `input` directory, then run the job using:
 
 ```bash
 java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 ```
 
-The extracted XML files will be created in the `output` directory.
+The XML files will be created in the `output` directory with the same file names.
