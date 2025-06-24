@@ -11,6 +11,14 @@ cd peppol-batch
 mvn package
 ```
 
+## Testing
+
+Run the unit tests with Maven:
+
+```bash
+mvn test
+```
+
 ## Running the batch job
 
 Place your PEPPOL XML invoices under the `input` directory, then run the job using:
