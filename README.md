@@ -30,3 +30,18 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 ```
 
 The XML files will be created in the `output` directory with the same file names.
+
+## Using samples from the Oxalis peppol-specifications repository
+
+To try additional invoice examples, clone the specifications repository next to this project:
+
+```bash
+git clone https://github.com/OxalisCommunity/peppol-specifications.git
+```
+
+After cloning, run the batch job pointing the `input` directory at one of the XML files from the cloned repository. You can also run the test `SpecificationsInvoiceTest` by providing the repository location using the `peppolSpecDir` system property:
+
+```bash
+mvn test -DpeppolSpecDir=../peppol-specifications
+```
+
