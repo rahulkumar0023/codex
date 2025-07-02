@@ -38,6 +38,7 @@ class UblInvoiceWriterTest {
         log.info("parsed.getID().getValue(): {}", parsed.getID().getValue());
         assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
         assertTrue(out.contains("<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\""));
+        assertFalse(out.contains("CommonExtensionComponents-2"));
     }
 
 }
