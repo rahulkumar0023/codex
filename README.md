@@ -61,6 +61,15 @@ InvoiceType invoice = parser.parse(xml);
 System.out.println(invoice.getID().getValue());
 ```
 
+Once an `InvoiceType` object is available it can be written back to XML using
+`UblInvoiceWriter`:
+
+```java
+UblInvoiceWriter writer = new UblInvoiceWriter();
+String out = writer.writeToString(invoice);
+Files.writeString(Path.of("invoice.xml"), out);
+```
+
 ## Using samples from the Oxalis peppol-specifications repository
 
 To try additional invoice examples, clone the specifications repository next to this project:
