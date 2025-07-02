@@ -57,4 +57,23 @@ class InvoiceXmlWriterTest {
         assertTrue(Files.exists(written));
         assertEquals(xml, Files.readString(written));
     }
+
+    @Test
+    void writesComplexInvoiceXmlToFile() throws Exception {
+        Path outputDir = Files.createTempDirectory("complex-invoices-test");
+
+        String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
+
+        InvoiceDocument doc = new InvoiceDocument(xml, Path.of("invoice1.xml"));
+
+        Chunk<InvoiceDocument> chunk = new Chunk<>();
+        chunk.add(doc);
+
+        InvoiceXmlWriter writer = new InvoiceXmlWriter(outputDir);
+        writer.write(chunk);
+
+        Path written = outputDir.resolve("invoice1.xml");
+        assertTrue(Files.exists(written));
+        assertEquals(xml, Files.readString(written));
+    }
 }
