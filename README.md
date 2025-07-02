@@ -68,9 +68,11 @@ Once an `InvoiceType` object is available it can be written back to XML using
 `UblInvoiceWriter`:
 
 ```java
+
 UblInvoiceWriter writer = new UblInvoiceWriter(); // main writer
 Path outFile = Path.of("invoice.xml");
 writer.write(invoice, outFile);
+
 ```
 
 ## Using samples from the Oxalis peppol-specifications repository
