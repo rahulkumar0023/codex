@@ -12,7 +12,7 @@ The `peppol-batch/pom.xml` file declares the dependencies needed for the batch j
 - `spring-boot-starter-test` supplies JUnit for tests.
 - `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
 
-The build uses the `spring-boot-maven-plugin` to create an executable JAR.
+
 
 ## Building
 
@@ -40,6 +40,7 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 ```
 
 The XML files will be created in the `output` directory with the same file names.
+
 
 ## Parsing invoices to Java objects
 
