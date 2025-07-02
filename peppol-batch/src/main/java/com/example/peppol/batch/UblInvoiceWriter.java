@@ -40,7 +40,12 @@ public class UblInvoiceWriter {
                     InvoiceType.class, invoice);
 
             marshaller.marshal(root, sw);
-            return sw.toString();
+
+            String xml = sw.toString();
+            if (ext == null || ext.getUBLExtension().isEmpty()) {
+                xml = xml.replaceAll(" xmlns:[^=]*=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\"", "");
+            }
+            return xml;
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to marshal invoice", e);
         }
