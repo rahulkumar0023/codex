@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
+@Slf4j
 class UblInvoiceWriterTest {
-
-
 
     @Test
     void writesInvoiceToFile() throws Exception {
@@ -27,7 +27,7 @@ class UblInvoiceWriterTest {
 
         String written = Files.readString(out);
         InvoiceType parsed = parser.parse(written);
+        log.info("parsed.getID().getValue(): {}", parsed.getID().getValue());
         assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
     }
-
 }

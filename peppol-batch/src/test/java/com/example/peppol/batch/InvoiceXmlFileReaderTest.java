@@ -8,12 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.item.Chunk;
 
 import com.example.peppol.batch.InvoiceXmlWriter;
 
+
+@Slf4j
 class InvoiceXmlFileReaderTest {
 
     private Path tempDir;
