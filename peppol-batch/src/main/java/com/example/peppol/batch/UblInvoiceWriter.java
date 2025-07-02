@@ -9,8 +9,8 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
-
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
+import network.oxalis.peppol.ubl2.jaxb.ObjectFactory;
 
 /**
  * Utility to write {@link InvoiceType} instances to XML.
@@ -33,6 +33,7 @@ public class UblInvoiceWriter {
             JAXBElement<InvoiceType> root = new JAXBElement<>(
                     new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
                     InvoiceType.class, invoice);
+
             marshaller.marshal(root, sw);
             return sw.toString();
         } catch (JAXBException e) {
