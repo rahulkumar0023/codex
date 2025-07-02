@@ -29,4 +29,18 @@ class InvoiceXmlFileReaderTest {
         String expected = Files.readString(tempDir.resolve("invoice1.xml"));
         assertEquals(expected, doc.getXml());
     }
+
+    @Test
+    void readsComplexInvoice() throws Exception {
+        Path dir = Files.createTempDirectory("complex-invoices");
+        Path sample = Path.of("src/test/resources/complex-invoice.xml");
+        Files.copy(sample, dir.resolve("invoice1.xml"), StandardCopyOption.REPLACE_EXISTING);
+
+        InvoiceXmlFileReader reader = new InvoiceXmlFileReader(dir);
+        InvoiceDocument doc = reader.read();
+
+        assertNotNull(doc);
+        String expected = Files.readString(dir.resolve("invoice1.xml"));
+        assertEquals(expected, doc.getXml());
+    }
 }
