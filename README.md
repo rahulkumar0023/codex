@@ -2,6 +2,8 @@
 
 This repository contains a sample Spring Batch project for processing PEPPOL UBL invoices. The batch job reads XML invoice files from the `input` directory and writes them unchanged to the `output` directory. The XML structure follows the PEPPOL UBL 2.1 specification.
 
+Sample invoice XML files are located under `peppol-batch/src/test/resources`. In addition to `sample-invoice.xml`, a more detailed example is provided in `complex-invoice.xml`.
+
 ## Building
 
 Use Maven to build the project:
