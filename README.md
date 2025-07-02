@@ -11,10 +11,10 @@ The `peppol-batch/pom.xml` file declares the dependencies needed for the batch j
 - `pdfbox` enables extracting embedded XML from PDFs.
 - `spring-boot-starter-test` supplies JUnit for tests.
 - `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
+
 - `jakarta.xml.bind-api` and `jaxb-runtime` bring in Jakarta JAXB 4 so the code
   compiles on Java 17.
 
-The build uses the `spring-boot-maven-plugin` to create an executable JAR.
 
 ## Building
 
@@ -43,10 +43,15 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 
 The XML files will be created in the `output` directory with the same file names.
 
+
+
+
 ## Parsing invoices to Java objects
 
-The project includes a simple `UblInvoiceParser` that uses `jakarta.xml.bind`
-via the `peppol-ubl21` library to convert invoice XML into JAXB classes. The following snippet parses
+The project includes a simple `UblInvoiceParser` that uses the `peppol-ubl21`
+library to convert invoice XML into JAXB classes. The following snippet parses
+
+
 an invoice and prints its ID:
 
 ```java
@@ -75,9 +80,6 @@ cloned repository and writes the invoice to a temporary directory. The output
 path is reported by the test and the file contents should match the original
 invoice.
 
-The `InvoiceXmlFileReaderTest` demonstrates the same process using the bundled
-`complex-invoice.xml` sample. It prints the location of the generated file so
-you can inspect it after the test run.
 
 ## Example end-to-end scenario
 
