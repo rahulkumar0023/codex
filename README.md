@@ -4,6 +4,15 @@ This repository contains a sample Spring Batch project for processing PEPPOL UBL
 
 Sample invoice XML files are located under `peppol-batch/src/test/resources`. In addition to `sample-invoice.xml`, a more detailed example is provided in `complex-invoice.xml`.
 
+## Maven configuration
+
+The `peppol-batch/pom.xml` file declares the dependencies needed for the batch job:
+- `spring-boot-starter-batch` and `spring-boot-starter` provide Spring Batch support.
+- `pdfbox` enables extracting embedded XML from PDFs.
+- `spring-boot-starter-test` supplies JUnit for tests.
+
+The build uses the `spring-boot-maven-plugin` to create an executable JAR.
+
 ## Building
 
 Use Maven to build the project:
