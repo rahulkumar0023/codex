@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class InvoiceXmlWriterTest {
 
     @Test
@@ -16,10 +17,13 @@ class InvoiceXmlWriterTest {
         Path outputDir = Files.createTempDirectory("invoices-test");
 
         // Load sample XML content
-        String xml = Files.readString(Path.of("src/test/resources/sample-invoice.xml"));
+        String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
 
         // Create an InvoiceDocument
-        InvoiceDocument doc = new InvoiceDocument(xml, Path.of("invoice1.xml"));
+        Path sourceFile = Path.of("invoice1.xml");
+
+
+        InvoiceDocument doc = new InvoiceDocument(xml, sourceFile);
 
         // Wrap the document in a Chunk
         Chunk<InvoiceDocument> chunk = new Chunk<>();
@@ -31,6 +35,7 @@ class InvoiceXmlWriterTest {
 
         // Assert the output file exists and content matches
         Path written = outputDir.resolve("invoice1.xml");
+        System.out.println("Written: " + written.toAbsolutePath());
         assertTrue(Files.exists(written));
         assertEquals(xml, Files.readString(written));
     }

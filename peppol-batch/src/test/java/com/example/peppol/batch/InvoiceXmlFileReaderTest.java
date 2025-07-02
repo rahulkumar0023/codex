@@ -21,7 +21,7 @@ class InvoiceXmlFileReaderTest {
     @BeforeEach
     void setup() throws Exception {
         tempDir = Files.createTempDirectory("invoices");
-        Path sample = Path.of("src/test/resources/sample-invoice.xml");
+        Path sample = Path.of("src/test/resources/complex-invoice.xml");
         Files.copy(sample, tempDir.resolve("invoice1.xml"), StandardCopyOption.REPLACE_EXISTING);
     }
 
