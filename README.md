@@ -14,6 +14,7 @@ The `peppol-batch/pom.xml` file declares the dependencies needed for the batch j
 
 The build uses the `spring-boot-maven-plugin` to create an executable JAR.
 
+
 ## Building
 
 Use Maven to build the project:
@@ -40,6 +41,7 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 ```
 
 The XML files will be created in the `output` directory with the same file names.
+
 
 ## Parsing invoices to Java objects
 
@@ -73,6 +75,7 @@ cloned repository and writes the invoice to a temporary directory. The output
 path is reported by the test and the file contents should match the original
 invoice.
 
+
 ## Example end-to-end scenario
 
 The project can be extended into a full batch pipeline using the following
@@ -95,4 +98,5 @@ approach:
 
 Running the batch job repeatedly can be achieved with a Spring `TaskScheduler`
 that launches it every minute.
+
 
