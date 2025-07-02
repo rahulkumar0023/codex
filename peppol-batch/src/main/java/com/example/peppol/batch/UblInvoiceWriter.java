@@ -27,7 +27,7 @@ public class UblInvoiceWriter {
             JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
             Marshaller marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new UblNamespacePrefixMapper());
+            marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UblNamespacePrefixMapper());
             StringWriter sw = new StringWriter();
             JAXBElement<InvoiceType> root = new JAXBElement<>(
                     new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
