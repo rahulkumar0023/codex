@@ -1,6 +1,6 @@
 package com.example.peppol.batch;
 
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
 /**
  * Provides stable namespace prefixes for UBL invoice marshalling.

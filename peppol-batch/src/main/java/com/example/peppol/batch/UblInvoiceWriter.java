@@ -10,7 +10,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
-import network.oxalis.peppol.ubl2.jaxb.ObjectFactory;
 
 /**
  * Utility to write {@link InvoiceType} instances to XML.
