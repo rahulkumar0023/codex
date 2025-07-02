@@ -4,7 +4,15 @@ This repository contains a sample Spring Batch project for processing PEPPOL UBL
 
 Sample invoice XML files are located under `peppol-batch/src/test/resources`. In addition to `sample-invoice.xml`, a more detailed example is provided in `complex-invoice.xml`.
 
-Sample invoice XML files are located under `peppol-batch/src/test/resources`. In addition to `sample-invoice.xml`, a more detailed example is provided in `complex-invoice.xml`.
+## Maven configuration
+
+The `peppol-batch/pom.xml` file declares the dependencies needed for the batch job:
+- `spring-boot-starter-batch` and `spring-boot-starter` provide Spring Batch support.
+- `pdfbox` enables extracting embedded XML from PDFs.
+- `spring-boot-starter-test` supplies JUnit for tests.
+- `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
+
+
 
 ## Building
 
@@ -32,6 +40,20 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 ```
 
 The XML files will be created in the `output` directory with the same file names.
+
+
+## Parsing invoices to Java objects
+
+The project includes a simple `UblInvoiceParser` that uses the `peppol-ubl21`
+library to convert invoice XML into JAXB classes. The following snippet parses
+an invoice and prints its ID:
+
+```java
+String xml = Files.readString(Path.of("complex-invoice.xml"));
+UblInvoiceParser parser = new UblInvoiceParser();
+InvoiceType invoice = parser.parse(xml);
+System.out.println(invoice.getID().getValue());
+```
 
 ## Using samples from the Oxalis peppol-specifications repository
 
