@@ -9,8 +9,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -43,13 +41,4 @@ public class BatchConfig {
         return steps.get("writeStep").tasklet(writeTasklet).build();
     }
 
-    @Bean
-    public ItemReader<InvoiceDocument> reader() {
-        return new InvoiceXmlFileReader(Path.of("input"));
-    }
-
-    @Bean
-    public ItemWriter<InvoiceDocument> writer() {
-        return new InvoiceXmlWriter(Path.of("output"));
-    }
 }

@@ -1,7 +1,10 @@
 package com.example.peppol.batch.tasklet;
 
 import com.example.peppol.batch.InvoiceDocument;
+import com.example.peppol.batch.InvoiceRecord;
 import com.example.peppol.batch.InvoiceXmlFileReader;
+import com.example.peppol.batch.UblInvoiceParser;
+import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +27,15 @@ public class InvoiceReadTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         InvoiceXmlFileReader reader = new InvoiceXmlFileReader(inputDir);
-        List<InvoiceDocument> docs = new ArrayList<>();
+        UblInvoiceParser parser = new UblInvoiceParser();
+        List<InvoiceRecord> records = new ArrayList<>();
         InvoiceDocument doc;
         while ((doc = reader.read()) != null) {
-            docs.add(doc);
+            InvoiceType invoice = parser.parse(doc.getXml());
+            records.add(new InvoiceRecord(invoice, doc.getSourceFile()));
         }
         chunkContext.getStepContext().getStepExecution()
-                .getJobExecution().getExecutionContext().put("invoices", docs);
+                .getJobExecution().getExecutionContext().put("invoices", records);
         return RepeatStatus.FINISHED;
     }
 }
