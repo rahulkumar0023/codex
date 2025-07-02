@@ -25,6 +25,11 @@ class UblInvoiceWriterTest {
         UblInvoiceWriter writer = new UblInvoiceWriter();
         String out = writer.writeToString(invoice);
 
+        Path outFile = Path.of("target", "generated-invoice.xml");
+        Files.createDirectories(outFile.getParent());
+        writer.write(invoice, outFile);
+        log.info("Written invoice to {}", outFile.toAbsolutePath());
+
         assertNotNull(out);
         assertFalse(out.isEmpty());
 
@@ -33,6 +38,7 @@ class UblInvoiceWriterTest {
         log.info("parsed.getID().getValue(): {}", parsed.getID().getValue());
         assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
         assertTrue(out.contains("<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\""));
+        assertFalse(out.contains("CommonExtensionComponents-2"));
     }
 
 }
