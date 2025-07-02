@@ -2,9 +2,11 @@ package com.example.peppol.batch;
 
 import java.io.StringReader;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
