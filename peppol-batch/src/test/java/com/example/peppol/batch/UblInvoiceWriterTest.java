@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
-
+@Slf4j
 class UblInvoiceWriterTest {
 
     @Test
@@ -29,6 +29,8 @@ class UblInvoiceWriterTest {
         assertFalse(out.isEmpty());
 
         InvoiceType parsed = parser.parse(out);
+
+        log.info("parsed.getID().getValue(): {}", parsed.getID().getValue());
         assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
         assertTrue(out.contains("<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\""));
     }
