@@ -39,6 +39,12 @@
             <groupId>network.oxalis.peppol</groupId>
             <artifactId>peppol-ubl21</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>network.oxalis.peppol.ubl2.jaxb</groupId>
+                    <artifactId>ubl2-jaxb</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>

@@ -22,7 +22,11 @@ public class UblInvoiceParser {
      */
     public InvoiceType parse(String xml) {
         try {
-            JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
+            JAXBContext ctx = JAXBContext.newInstance(new Class[] {
+                    network.oxalis.peppol.ubl2.jaxb.InvoiceType.class,
+                    network.oxalis.peppol.ubl2.jaxb.CreditNoteType.class,
+                    // ... any other root types
+            });
             Unmarshaller unmarshaller = ctx.createUnmarshaller();
             return (InvoiceType) unmarshaller.unmarshal(new StringReader(xml));
         } catch (JAXBException e) {
