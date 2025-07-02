@@ -45,6 +45,8 @@ The XML files will be created in the `output` directory with the same file names
 
 The batch steps internally rely on `UblInvoiceParser` to read each invoice into
 `InvoiceType` objects and `UblInvoiceWriter` to write them back to XML.
+`UblCreditNoteParser` and `UblCreditNoteWriter` provide the same functionality
+for credit notes.
 
 
 
@@ -76,6 +78,15 @@ writer.write(invoice, outFile);
 The writer uses a `NamespacePrefixMapper` so the output starts with:
 `<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"` and
 declares the canonical `cac` and `cbc` prefixes.
+
+Similarly, credit notes can be handled with:
+
+```java
+UblCreditNoteParser cnParser = new UblCreditNoteParser();
+CreditNoteType creditNote = cnParser.parse(xml);
+UblCreditNoteWriter cnWriter = new UblCreditNoteWriter();
+cnWriter.write(creditNote, Path.of("credit-note.xml"));
+```
 
 
 ## Using samples from the Oxalis peppol-specifications repository

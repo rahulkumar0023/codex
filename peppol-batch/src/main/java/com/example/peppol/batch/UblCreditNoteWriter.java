@@ -9,35 +9,35 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
-import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
+import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 
 /**
- * Utility to write {@link InvoiceType} instances to XML.
+ * Utility to write {@link CreditNoteType} instances to XML.
  */
-public class UblInvoiceWriter {
+public class UblCreditNoteWriter {
 
     /**
-     * Marshal the given invoice to a formatted XML string.
+     * Marshal the given credit note to a formatted XML string.
      *
-     * @param invoice the invoice object
+     * @param creditNote the credit note object
      * @return XML representation
      */
-    public String writeToString(InvoiceType invoice) {
+    public String writeToString(CreditNoteType creditNote) {
         try {
-            JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
+            JAXBContext ctx = JAXBContext.newInstance(CreditNoteType.class);
             Marshaller marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UblNamespacePrefixMapper());
 
-            var ext = invoice.getUBLExtensions();
+            var ext = creditNote.getUBLExtensions();
             if (ext != null && ext.getUBLExtension().isEmpty()) {
-                invoice.setUBLExtensions(null);
+                creditNote.setUBLExtensions(null);
             }
 
             StringWriter sw = new StringWriter();
-            JAXBElement<InvoiceType> root = new JAXBElement<>(
-                    new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
-                    InvoiceType.class, invoice);
+            JAXBElement<CreditNoteType> root = new JAXBElement<>(
+                    new QName("urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2", "CreditNote"),
+                    CreditNoteType.class, creditNote);
 
             marshaller.marshal(root, sw);
 
@@ -47,21 +47,21 @@ public class UblInvoiceWriter {
             }
             return xml;
         } catch (JAXBException e) {
-            throw new RuntimeException("Failed to marshal invoice", e);
+            throw new RuntimeException("Failed to marshal credit note", e);
         }
     }
 
     /**
-     * Marshal the invoice to the given file path.
+     * Marshal the credit note to the given file path.
      *
-     * @param invoice the invoice to marshal
+     * @param creditNote the credit note to marshal
      * @param output  the target file path
      */
-    public void write(InvoiceType invoice, Path output) {
+    public void write(CreditNoteType creditNote, Path output) {
         try {
-            Files.writeString(output, writeToString(invoice));
+            Files.writeString(output, writeToString(creditNote));
         } catch (Exception e) {
-            throw new RuntimeException("Failed to write invoice to " + output, e);
+            throw new RuntimeException("Failed to write credit note to " + output, e);
         }
     }
 }
