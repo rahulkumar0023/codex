@@ -25,6 +25,11 @@ class UblInvoiceWriterTest {
         UblInvoiceWriter writer = new UblInvoiceWriter();
         String out = writer.writeToString(invoice);
 
+        Path outFile = Path.of("target", "generated-invoice.xml");
+        Files.createDirectories(outFile.getParent());
+        writer.write(invoice, outFile);
+        log.info("Written invoice to {}", outFile.toAbsolutePath());
+
         assertNotNull(out);
         assertFalse(out.isEmpty());
 
