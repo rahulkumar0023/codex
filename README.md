@@ -72,8 +72,11 @@ Once an `InvoiceType` object is available it can be written back to XML using
 UblInvoiceWriter writer = new UblInvoiceWriter(); // main writer
 Path outFile = Path.of("invoice.xml");
 writer.write(invoice, outFile);
-
 ```
+The writer uses a `NamespacePrefixMapper` so the output starts with:
+`<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"` and
+declares the canonical `cac` and `cbc` prefixes.
+
 
 ## Using samples from the Oxalis peppol-specifications repository
 

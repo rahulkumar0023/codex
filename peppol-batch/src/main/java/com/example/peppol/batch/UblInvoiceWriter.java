@@ -8,7 +8,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-
+import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import network.oxalis.peppol.ubl2.jaxb.ObjectFactory;
 
@@ -25,11 +25,15 @@ public class UblInvoiceWriter {
      */
     public String writeToString(InvoiceType invoice) {
         try {
-            JAXBContext ctx = JAXBContext.newInstance("network.oxalis.peppol.ubl2.jaxb");
+            JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
             Marshaller marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new UblNamespacePrefixMapper());
             StringWriter sw = new StringWriter();
-            JAXBElement<InvoiceType> root = new ObjectFactory().createInvoice(invoice);
+            JAXBElement<InvoiceType> root = new JAXBElement<>(
+                    new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
+                    InvoiceType.class, invoice);
+
             marshaller.marshal(root, sw);
             return sw.toString();
         } catch (JAXBException e) {
