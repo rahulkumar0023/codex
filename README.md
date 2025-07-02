@@ -43,6 +43,9 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 
 The XML files will be created in the `output` directory with the same file names.
 
+The batch steps internally rely on `UblInvoiceParser` to read each invoice into
+`InvoiceType` objects and `UblInvoiceWriter` to write them back to XML.
+
 
 
 
@@ -65,9 +68,11 @@ Once an `InvoiceType` object is available it can be written back to XML using
 `UblInvoiceWriter`:
 
 ```java
-UblInvoiceWriter writer = new UblInvoiceWriter();
-String out = writer.writeToString(invoice);
-Files.writeString(Path.of("invoice.xml"), out);
+
+UblInvoiceWriter writer = new UblInvoiceWriter(); // main writer
+Path outFile = Path.of("invoice.xml");
+writer.write(invoice, outFile);
+
 ```
 
 ## Using samples from the Oxalis peppol-specifications repository
