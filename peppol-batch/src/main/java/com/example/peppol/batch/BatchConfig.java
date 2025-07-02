@@ -8,31 +8,39 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.peppol.batch.tasklet.InvoiceReadTasklet;
+import com.example.peppol.batch.tasklet.InvoiceWriteTasklet;
+
 @Configuration
 @EnableBatchProcessing
+
 public class BatchConfig {
 
     @Bean
-    public Job peppolInvoiceJob(JobBuilderFactory jobs, Step extractXmlStep) {
+    public Job peppolInvoiceJob(JobBuilderFactory jobs, Step readStep, Step writeStep) {
         return jobs.get("peppolInvoiceJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(extractXmlStep)
-                .end()
+                .start(readStep)
+                .next(writeStep)
                 .build();
     }
 
     @Bean
-    public Step extractXmlStep(StepBuilderFactory steps, ItemReader<InvoiceDocument> reader, ItemWriter<InvoiceDocument> writer) {
-        return steps.get("extractXmlStep")
-                .<InvoiceDocument, InvoiceDocument>chunk(1)
-                .reader(reader)
-                .writer(writer)
-                .build();
+    public Step readStep(StepBuilderFactory steps) {
+        Tasklet readTasklet = new InvoiceReadTasklet(Path.of("input"));
+        return steps.get("readStep").tasklet(readTasklet).build();
+    }
+
+    @Bean
+    public Step writeStep(StepBuilderFactory steps) {
+        Tasklet writeTasklet = new InvoiceWriteTasklet(Path.of("output"));
+        return steps.get("writeStep").tasklet(writeTasklet).build();
     }
 
     @Bean
