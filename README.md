@@ -12,6 +12,7 @@ The `peppol-batch/pom.xml` file declares the dependencies needed for the batch j
 - `spring-boot-starter-test` supplies JUnit for tests.
 - `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
 
+The build uses the `spring-boot-maven-plugin` to create an executable JAR.
 
 
 ## Building
@@ -73,4 +74,29 @@ The `SpecificationsInvoiceTest` reads the first XML file it can find in the
 cloned repository and writes the invoice to a temporary directory. The output
 path is reported by the test and the file contents should match the original
 invoice.
+
+
+## Example end-to-end scenario
+
+The project can be extended into a full batch pipeline using the following
+approach:
+
+1. **Fetch archives** from an S3 compatible store and place them under
+   `/tmp/raw`.
+2. **Decrypt and unzip** each `zip.pgp` archive with a custom `Tasklet`. The
+   extracted XML files should end up in `/tmp/unzipped`.
+3. **Parse invoices** using a `MultiResourceItemReader<InvoiceType>` backed by
+   JAXB classes generated from the PEPPOL UBL 2.1 schemas.
+4. **Process invoices** as needed. The reference code simply re‑marshals them
+   without writing to a database.
+5. **Write results** to `/tmp/processed/xml` and generate placeholder PDFs in
+   `/tmp/processed/pdf`. A `NamespacePrefixMapper` ensures that the output uses
+   the standard `cac` and `cbc` prefixes with no `nsXX` namespaces.
+6. **Upload or deliver** the processed files if required.
+7. **Clean up** temporary directories so every job run starts with a clean
+   workspace.
+
+Running the batch job repeatedly can be achieved with a Spring `TaskScheduler`
+that launches it every minute.
+
 
