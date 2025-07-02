@@ -12,6 +12,10 @@ import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
 /**
  * Utility to parse UBL 2.1 invoice XML into JAXB objects.
+ *
+ * <p>This class acts as the reader counterpart to {@link UblInvoiceWriter} and
+ * exposes a simple {@link #parse(String)} method for converting XML into
+ * {@link InvoiceType} objects.</p>
  */
 public class UblInvoiceParser {
 
