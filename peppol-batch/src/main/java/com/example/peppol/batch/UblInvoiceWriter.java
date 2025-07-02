@@ -34,6 +34,7 @@ public class UblInvoiceWriter {
             if (ext != null && ext.getUBLExtension().isEmpty()) {
                 invoice.setUBLExtensions(null);
             }
+
             StringWriter sw = new StringWriter();
             JAXBElement<InvoiceType> root = new JAXBElement<>(
                     new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
