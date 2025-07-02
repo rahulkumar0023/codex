@@ -20,7 +20,7 @@ class InvoiceTaskletTest {
     @Test
     void readsAndWritesInvoiceUsingTasklets() throws Exception {
         Path inputDir = Files.createTempDirectory("tasklet-in");
-        Path sample = Path.of("src/test/resources/sample-invoice.xml");
+        Path sample = Path.of("src/test/resources/complex-invoice.xml");
         Files.copy(sample, inputDir.resolve("invoice1.xml"));
 
         Path outputDir = Files.createTempDirectory("tasklet-out");

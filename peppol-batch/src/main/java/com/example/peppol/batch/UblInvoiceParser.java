@@ -4,6 +4,7 @@ import java.io.StringReader;
 
 
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
@@ -22,13 +23,11 @@ public class UblInvoiceParser {
      */
     public InvoiceType parse(String xml) {
         try {
-            JAXBContext ctx = JAXBContext.newInstance(new Class[] {
-                    network.oxalis.peppol.ubl2.jaxb.InvoiceType.class,
-                    network.oxalis.peppol.ubl2.jaxb.CreditNoteType.class,
-                    // ... any other root types
-            });
+            JAXBContext ctx = JAXBContext.newInstance("network.oxalis.peppol.ubl2.jaxb");
             Unmarshaller unmarshaller = ctx.createUnmarshaller();
-            return (InvoiceType) unmarshaller.unmarshal(new StringReader(xml));
+            JAXBElement<InvoiceType> root = (JAXBElement<InvoiceType>) unmarshaller.unmarshal(new StringReader(xml));
+            InvoiceType invoice = root.getValue();
+            return invoice;
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to parse invoice", e);
         }
