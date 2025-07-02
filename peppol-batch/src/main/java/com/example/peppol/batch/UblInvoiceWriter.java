@@ -10,6 +10,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
+import network.oxalis.peppol.ubl2.jaxb.UBLExtensionsType;
 
 /**
  * Utility to write {@link InvoiceType} instances to XML.
@@ -27,7 +28,12 @@ public class UblInvoiceWriter {
             JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
             Marshaller marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new UblNamespacePrefixMapper());
+            marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UblNamespacePrefixMapper());
+
+            UBLExtensionsType ext = invoice.getUBLExtensions();
+            if (ext != null && ext.getUBLExtension().isEmpty()) {
+                invoice.setUBLExtensions(null);
+            }
             StringWriter sw = new StringWriter();
             JAXBElement<InvoiceType> root = new JAXBElement<>(
                     new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
