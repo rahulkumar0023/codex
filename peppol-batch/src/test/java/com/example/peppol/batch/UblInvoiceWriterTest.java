@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.batch.item.Chunk;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
@@ -39,6 +40,26 @@ class UblInvoiceWriterTest {
         assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
         assertTrue(out.contains("<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\""));
         assertFalse(out.contains("CommonExtensionComponents-2"));
+    }
+
+    @Test
+    void writesInvoiceUsingItemWriter() throws Exception {
+        String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
+        UblInvoiceParser parser = new UblInvoiceParser();
+        InvoiceType invoice = parser.parse(xml);
+
+        Path outputDir = Files.createTempDirectory("invoice-item-writer");
+        UblInvoiceWriter writer = new UblInvoiceWriter(outputDir);
+        Chunk<InvoiceType> chunk = new Chunk<>();
+        chunk.add(invoice);
+        writer.write(chunk);
+
+        Path written = outputDir.resolve(invoice.getID().getValue() + ".xml");
+        assertTrue(Files.exists(written));
+
+        String writtenXml = Files.readString(written);
+        InvoiceType parsed = parser.parse(writtenXml);
+        assertEquals(invoice.getID().getValue(), parsed.getID().getValue());
     }
 
 }

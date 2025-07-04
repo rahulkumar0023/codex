@@ -3,6 +3,7 @@ package com.example.peppol.batch;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.IOException;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -10,11 +11,38 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
+import org.springframework.batch.item.Chunk;
+import org.springframework.batch.item.ItemWriter;
 
 /**
  * Utility to write {@link InvoiceType} instances to XML.
  */
-public class UblInvoiceWriter {
+public class UblInvoiceWriter implements ItemWriter<InvoiceType> {
+
+    private final Path outputDir;
+
+    /**
+     * Create a writer without an output directory. The {@link #write(Chunk)}
+     * method cannot be used in this case but {@link #write(InvoiceType, Path)}
+     * still works.
+     */
+    public UblInvoiceWriter() {
+        this.outputDir = null;
+    }
+
+    /**
+     * Create a writer that outputs invoices to the given directory.
+     *
+     * @param outputDir directory where invoice XML files will be written
+     */
+    public UblInvoiceWriter(Path outputDir) {
+        this.outputDir = outputDir;
+        try {
+            Files.createDirectories(outputDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create output directory", e);
+        }
+    }
 
     /**
      * Marshal the given invoice to a formatted XML string.
@@ -62,6 +90,25 @@ public class UblInvoiceWriter {
             Files.writeString(output, writeToString(invoice));
         } catch (Exception e) {
             throw new RuntimeException("Failed to write invoice to " + output, e);
+        }
+    }
+
+    @Override
+    public void write(Chunk<? extends InvoiceType> items) throws Exception {
+        if (outputDir == null) {
+            throw new IllegalStateException("Output directory not configured");
+        }
+        int counter = 0;
+        for (InvoiceType invoice : items) {
+            String baseName = null;
+            if (invoice.getID() != null && invoice.getID().getValue() != null
+                    && !invoice.getID().getValue().isBlank()) {
+                baseName = invoice.getID().getValue();
+            } else {
+                baseName = "invoice-" + (++counter);
+            }
+            Path out = outputDir.resolve(baseName + ".xml");
+            write(invoice, out);
         }
     }
 }
