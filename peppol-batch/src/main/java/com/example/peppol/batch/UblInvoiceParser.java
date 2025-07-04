@@ -1,8 +1,7 @@
 package com.example.peppol.batch;
 
-import java.io.StringReader;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
@@ -35,12 +34,21 @@ public class UblInvoiceParser implements ResourceAwareItemReaderItemStream<Invoi
      * @return parsed {@link InvoiceType}
      */
     public InvoiceType parse(String xml) {
+        return parse(new java.io.ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    /**
+     * Parse invoice XML from the given input stream.
+     *
+     * @param xmlStream input stream containing invoice XML
+     * @return parsed {@link InvoiceType}
+     */
+    public InvoiceType parse(InputStream xmlStream) {
         try {
             JAXBContext ctx = JAXBContext.newInstance("network.oxalis.peppol.ubl2.jaxb");
             Unmarshaller unmarshaller = ctx.createUnmarshaller();
-            JAXBElement<InvoiceType> root = (JAXBElement<InvoiceType>) unmarshaller.unmarshal(new StringReader(xml));
-            InvoiceType invoice = root.getValue();
-            return invoice;
+            JAXBElement<InvoiceType> root = (JAXBElement<InvoiceType>) unmarshaller.unmarshal(xmlStream);
+            return root.getValue();
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to parse invoice", e);
         }
@@ -61,9 +69,10 @@ public class UblInvoiceParser implements ResourceAwareItemReaderItemStream<Invoi
         if (resource == null || read) {
             return null;
         }
-        String xml = Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
-        read = true;
-        return parse(xml);
+        try (InputStream in = resource.getInputStream()) {
+            read = true;
+            return parse(in);
+        }
     }
 
     @Override
