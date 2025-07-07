@@ -17,7 +17,7 @@ import org.springframework.batch.item.ItemWriter;
 /**
  * Utility to write {@link InvoiceType} instances to XML.
  */
-public class UblInvoiceWriter implements ItemWriter<InvoiceType> {
+public class XmlInvoiceWriter implements ItemWriter<InvoiceType> {
 
     private final Path outputDir;
 
@@ -26,7 +26,7 @@ public class UblInvoiceWriter implements ItemWriter<InvoiceType> {
      * method cannot be used in this case but {@link #write(InvoiceType, Path)}
      * still works.
      */
-    public UblInvoiceWriter() {
+    public XmlInvoiceWriter() {
         this.outputDir = null;
     }
 
@@ -35,7 +35,7 @@ public class UblInvoiceWriter implements ItemWriter<InvoiceType> {
      *
      * @param outputDir directory where invoice XML files will be written
      */
-    public UblInvoiceWriter(Path outputDir) {
+    public XmlInvoiceWriter(Path outputDir) {
         this.outputDir = outputDir;
         try {
             Files.createDirectories(outputDir);
@@ -100,12 +100,15 @@ public class UblInvoiceWriter implements ItemWriter<InvoiceType> {
         }
         int counter = 0;
         for (InvoiceType invoice : items) {
-            String baseName = null;
+            String baseName;
             if (invoice.getID() != null && invoice.getID().getValue() != null
                     && !invoice.getID().getValue().isBlank()) {
                 baseName = invoice.getID().getValue();
             } else {
                 baseName = "invoice-" + (++counter);
+            }
+            if (!baseName.contains("INV")) {
+                baseName = "INV-" + baseName;
             }
             Path out = outputDir.resolve(baseName + ".xml");
             write(invoice, out);

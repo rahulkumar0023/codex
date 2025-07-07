@@ -44,7 +44,7 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 The XML files will be created in the `output` directory with the same file names.
 
 The batch steps internally rely on `XmlInvoiceReader` to read each invoice into
-`InvoiceType` objects and `UblInvoiceWriter` to write them back to XML.
+`InvoiceType` objects and `XmlInvoiceWriter` to write them back to XML.
 `XmlCreditNoteReader` and `UblCreditNoteWriter` provide the same functionality
 for credit notes.
 
@@ -67,11 +67,11 @@ System.out.println(invoice.getID().getValue());
 ```
 
 Once an `InvoiceType` object is available it can be written back to XML using
-`UblInvoiceWriter`:
+`XmlInvoiceWriter`:
 
 ```java
 
-UblInvoiceWriter writer = new UblInvoiceWriter(); // main writer
+XmlInvoiceWriter writer = new XmlInvoiceWriter(); // main writer
 Path outFile = Path.of("invoice.xml");
 writer.write(invoice, outFile);
 ```
