@@ -22,7 +22,7 @@ import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
  * exposes a simple {@link #parse(String)} method for converting XML into
  * {@link InvoiceType} objects.</p>
  */
-public class UblInvoiceParser implements ResourceAwareItemReaderItemStream<InvoiceType> {
+public class XmlInvoiceReader implements ResourceAwareItemReaderItemStream<InvoiceType> {
 
     private Resource resource;
     private boolean read;

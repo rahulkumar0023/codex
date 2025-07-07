@@ -16,7 +16,7 @@ class UblCreditNoteWriterTest {
     @Test
     void writesCreditNoteToXmlString() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/sample-creditnote.xml"));
-        UblCreditNoteParser parser = new UblCreditNoteParser();
+        XmlCreditNoteReader parser = new XmlCreditNoteReader();
         CreditNoteType creditNote = parser.parse(xml);
 
         UblCreditNoteWriter writer = new UblCreditNoteWriter();

@@ -27,7 +27,7 @@ class SpecificationsInvoiceTest {
         assumeTrue(example.isPresent(), "No XML invoice found in repo");
 
         String xml = Files.readString(example.get());
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XmlInvoiceReader parser = new XmlInvoiceReader();
         assertNotNull(parser.parse(xml));
     }
 
@@ -40,7 +40,7 @@ class SpecificationsInvoiceTest {
         assumeTrue(example.isPresent(), "No XML invoice found in repo");
 
         String xml = Files.readString(example.get());
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XmlInvoiceReader parser = new XmlInvoiceReader();
         assertNotNull(parser.parse(xml));
 
         InvoiceDocument doc = new InvoiceDocument(xml, example.get());
