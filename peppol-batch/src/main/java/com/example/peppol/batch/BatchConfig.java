@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import com.example.peppol.batch.tasklet.InvoiceReadTasklet;
-import com.example.peppol.batch.tasklet.InvoiceWriteTasklet;
 import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
 import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
 import com.example.peppol.batch.tasklet.CleanupTasklet;
@@ -35,14 +33,6 @@ import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 
 public class BatchConfig {
 
-    @Bean
-    public Job peppolInvoiceJob(JobBuilderFactory jobs, Step readStep, Step writeStep) {
-        return jobs.get("peppolInvoiceJob")
-                .incrementer(new RunIdIncrementer())
-                .start(readStep)
-                .next(writeStep)
-                .build();
-    }
 
     /**
      * Job showcasing a simple end-to-end flow including fetching archives,
@@ -67,17 +57,7 @@ public class BatchConfig {
                 .build();
     }
 
-    @Bean
-    public Step readStep(StepBuilderFactory steps) {
-        Tasklet readTasklet = new InvoiceReadTasklet(Path.of("input"));
-        return steps.get("readStep").tasklet(readTasklet).build();
-    }
 
-    @Bean
-    public Step writeStep(StepBuilderFactory steps) {
-        Tasklet writeTasklet = new InvoiceWriteTasklet(Path.of("output"));
-        return steps.get("writeStep").tasklet(writeTasklet).build();
-    }
 
     // ---------------------------------------------------------------------
     // Extended job step definitions
