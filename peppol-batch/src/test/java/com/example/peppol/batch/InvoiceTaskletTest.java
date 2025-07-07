@@ -1,5 +1,6 @@
 package com.example.peppol.batch;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.peppol.batch.tasklet.InvoiceReadTasklet;
@@ -22,6 +23,8 @@ class InvoiceTaskletTest {
         Path inputDir = Files.createTempDirectory("tasklet-in");
         Path sample = Path.of("src/test/resources/complex-invoice.xml");
         Files.copy(sample, inputDir.resolve("invoice1.xml"));
+        Path credit = Path.of("src/test/resources/sample-creditnote.xml");
+        Files.copy(credit, inputDir.resolve("credit1.xml"));
 
         Path outputDir = Files.createTempDirectory("tasklet-out");
 
@@ -32,6 +35,10 @@ class InvoiceTaskletTest {
 
         InvoiceReadTasklet readTasklet = new InvoiceReadTasklet(inputDir);
         readTasklet.execute(readContribution, readContext);
+
+        var ctx = jobExecution.getExecutionContext();
+        assertEquals(1, ((java.util.List<?>) ctx.get("invoices")).size());
+        assertEquals(1, ((java.util.List<?>) ctx.get("creditNotes")).size());
 
         StepExecution writeExecution = new StepExecution("writeStep", jobExecution);
         ChunkContext writeContext = new ChunkContext(new StepContext(writeExecution));
