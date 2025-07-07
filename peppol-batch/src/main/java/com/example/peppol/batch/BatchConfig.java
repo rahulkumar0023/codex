@@ -93,7 +93,7 @@ public class BatchConfig {
     public MultiResourceItemReader<InvoiceType> xmlInvoiceReader() throws IOException {
         MultiResourceItemReader<InvoiceType> reader = new MultiResourceItemReader<>();
         reader.setResources(new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*.xml"));
+                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*INV*.xml"));
         reader.setDelegate(new XmlInvoiceReader());
         return reader;
     }
@@ -112,7 +112,7 @@ public class BatchConfig {
     public MultiResourceItemReader<CreditNoteType> xmlCreditNoteReader() throws IOException {
         MultiResourceItemReader<CreditNoteType> reader = new MultiResourceItemReader<>();
         reader.setResources(new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*.xml"));
+                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*CN*.xml"));
         reader.setDelegate(new XmlCreditNoteReader());
         return reader;
     }
