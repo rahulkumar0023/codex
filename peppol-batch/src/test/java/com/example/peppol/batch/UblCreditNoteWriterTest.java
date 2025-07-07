@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import com.example.peppol.batch.XMLCreditNoteType;
 
 @Slf4j
 class UblCreditNoteWriterTest {
@@ -16,7 +17,7 @@ class UblCreditNoteWriterTest {
     @Test
     void writesCreditNoteToXmlString() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/sample-creditnote.xml"));
-        UblCreditNoteParser parser = new UblCreditNoteParser();
+        XMLCreditNoteType parser = new XMLCreditNoteType();
         CreditNoteType creditNote = parser.parse(xml);
 
         UblCreditNoteWriter writer = new UblCreditNoteWriter();

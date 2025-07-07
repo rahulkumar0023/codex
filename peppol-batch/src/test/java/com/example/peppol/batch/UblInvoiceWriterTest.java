@@ -14,13 +14,15 @@ import org.springframework.batch.item.Chunk;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
+import com.example.peppol.batch.XMlInvoiceReader;
+
 @Slf4j
 class UblInvoiceWriterTest {
 
     @Test
     void writesInvoiceToXmlString() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XMlInvoiceReader parser = new XMlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
 
         UblInvoiceWriter writer = new UblInvoiceWriter();
@@ -45,7 +47,7 @@ class UblInvoiceWriterTest {
     @Test
     void writesInvoiceUsingItemWriter() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XMlInvoiceReader parser = new XMlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
 
         Path outputDir = Files.createTempDirectory("invoice-item-writer");

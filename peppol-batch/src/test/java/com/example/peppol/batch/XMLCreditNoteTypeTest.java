@@ -9,13 +9,14 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import com.example.peppol.batch.XMLCreditNoteType;
 
-class UblCreditNoteParserTest {
+class XMLCreditNoteTypeTest {
 
     @Test
     void parsesSampleCreditNote() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/sample-creditnote.xml"));
-        UblCreditNoteParser parser = new UblCreditNoteParser();
+        XMLCreditNoteType parser = new XMLCreditNoteType();
         CreditNoteType creditNote = parser.parse(xml);
         assertNotNull(creditNote);
         assertEquals("CN758494", creditNote.getID().getValue());

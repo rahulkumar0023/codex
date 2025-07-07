@@ -3,7 +3,7 @@ package com.example.peppol.batch.tasklet;
 import com.example.peppol.batch.InvoiceDocument;
 import com.example.peppol.batch.InvoiceRecord;
 import com.example.peppol.batch.InvoiceXmlFileReader;
-import com.example.peppol.batch.UblInvoiceParser;
+import com.example.peppol.batch.XMlInvoiceReader;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class InvoiceReadTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         InvoiceXmlFileReader reader = new InvoiceXmlFileReader(inputDir);
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XMlInvoiceReader parser = new XMlInvoiceReader();
         List<InvoiceRecord> records = new ArrayList<>();
         InvoiceDocument doc;
         while ((doc = reader.read()) != null) {
