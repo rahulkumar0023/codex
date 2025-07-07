@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
-class UblInvoiceParserTest {
+class XmlInvoiceReaderTest {
 
     @Test
     void parsesComplexInvoice() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XmlInvoiceReader parser = new XmlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
         assertNotNull(invoice);
         assertEquals("TickstarAP-BIS3-test-01", invoice.getID().getValue());
@@ -24,7 +24,7 @@ class UblInvoiceParserTest {
 
     @Test
     void readsInvoiceAsItemReader() throws Exception {
-        UblInvoiceParser reader = new UblInvoiceParser();
+        XmlInvoiceReader reader = new XmlInvoiceReader();
         reader.setResource(new org.springframework.core.io.FileSystemResource("src/test/resources/complex-invoice.xml"));
         reader.open(new org.springframework.batch.item.ExecutionContext());
         InvoiceType invoice = reader.read();

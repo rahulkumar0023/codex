@@ -43,9 +43,9 @@ java -jar target/peppol-batch-0.0.1-SNAPSHOT.jar
 
 The XML files will be created in the `output` directory with the same file names.
 
-The batch steps internally rely on `UblInvoiceParser` to read each invoice into
+The batch steps internally rely on `XmlInvoiceReader` to read each invoice into
 `InvoiceType` objects and `UblInvoiceWriter` to write them back to XML.
-`UblCreditNoteParser` and `UblCreditNoteWriter` provide the same functionality
+`XmlCreditNoteReader` and `UblCreditNoteWriter` provide the same functionality
 for credit notes.
 
 
@@ -53,7 +53,7 @@ for credit notes.
 
 ## Parsing invoices to Java objects
 
-The project includes a simple `UblInvoiceParser` that uses the `peppol-ubl21`
+The project includes a simple `XmlInvoiceReader` that uses the `peppol-ubl21`
 library to convert invoice XML into JAXB classes. The following snippet parses
 
 
@@ -61,7 +61,7 @@ an invoice and prints its ID:
 
 ```java
 String xml = Files.readString(Path.of("complex-invoice.xml"));
-UblInvoiceParser parser = new UblInvoiceParser();
+XmlInvoiceReader parser = new XmlInvoiceReader();
 InvoiceType invoice = parser.parse(xml);
 System.out.println(invoice.getID().getValue());
 ```
@@ -82,7 +82,7 @@ declares the canonical `cac` and `cbc` prefixes.
 Similarly, credit notes can be handled with:
 
 ```java
-UblCreditNoteParser cnParser = new UblCreditNoteParser();
+XmlCreditNoteReader cnParser = new XmlCreditNoteReader();
 CreditNoteType creditNote = cnParser.parse(xml);
 UblCreditNoteWriter cnWriter = new UblCreditNoteWriter();
 cnWriter.write(creditNote, Path.of("credit-note.xml"));

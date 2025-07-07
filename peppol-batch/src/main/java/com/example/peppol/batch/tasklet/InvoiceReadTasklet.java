@@ -2,8 +2,8 @@ package com.example.peppol.batch.tasklet;
 
 import com.example.peppol.batch.CreditNoteRecord;
 import com.example.peppol.batch.InvoiceRecord;
-import com.example.peppol.batch.UblCreditNoteParser;
-import com.example.peppol.batch.UblInvoiceParser;
+import com.example.peppol.batch.XmlCreditNoteReader;
+import com.example.peppol.batch.XmlInvoiceReader;
 import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import java.io.InputStream;
@@ -33,8 +33,8 @@ public class InvoiceReadTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        UblInvoiceParser invoiceParser = new UblInvoiceParser();
-        UblCreditNoteParser creditNoteParser = new UblCreditNoteParser();
+        XmlInvoiceReader invoiceParser = new XmlInvoiceReader();
+        XmlCreditNoteReader creditNoteParser = new XmlCreditNoteReader();
 
         List<InvoiceRecord> invoices = new ArrayList<>();
         List<CreditNoteRecord> creditNotes = new ArrayList<>();

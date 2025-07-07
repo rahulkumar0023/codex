@@ -20,7 +20,7 @@ class UblInvoiceWriterTest {
     @Test
     void writesInvoiceToXmlString() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XmlInvoiceReader parser = new XmlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
 
         UblInvoiceWriter writer = new UblInvoiceWriter();
@@ -45,7 +45,7 @@ class UblInvoiceWriterTest {
     @Test
     void writesInvoiceUsingItemWriter() throws Exception {
         String xml = Files.readString(Path.of("src/test/resources/complex-invoice.xml"));
-        UblInvoiceParser parser = new UblInvoiceParser();
+        XmlInvoiceReader parser = new XmlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
 
         Path outputDir = Files.createTempDirectory("invoice-item-writer");
