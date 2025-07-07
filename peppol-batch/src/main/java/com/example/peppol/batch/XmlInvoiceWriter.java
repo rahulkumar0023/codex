@@ -107,9 +107,6 @@ public class XmlInvoiceWriter implements ItemWriter<InvoiceType> {
             } else {
                 baseName = "invoice-" + (++counter);
             }
-            if (!baseName.contains("INV")) {
-                baseName = "INV-" + baseName;
-            }
             Path out = outputDir.resolve(baseName + ".xml");
             write(invoice, out);
         }
