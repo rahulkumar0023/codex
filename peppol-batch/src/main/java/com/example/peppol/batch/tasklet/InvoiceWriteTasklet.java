@@ -1,7 +1,7 @@
 package com.example.peppol.batch.tasklet;
 
 import com.example.peppol.batch.InvoiceRecord;
-import com.example.peppol.batch.UblInvoiceWriter;
+import com.example.peppol.batch.XmlInvoiceWriter;
 import java.nio.file.Path;
 import java.util.List;
 import org.springframework.batch.core.StepContribution;
@@ -26,7 +26,7 @@ public class InvoiceWriteTasklet implements Tasklet {
         List<InvoiceRecord> records = (List<InvoiceRecord>) chunkContext.getStepContext()
                 .getStepExecution().getJobExecution().getExecutionContext().get("invoices");
         if (records != null && !records.isEmpty()) {
-            UblInvoiceWriter writer = new UblInvoiceWriter();
+            XmlInvoiceWriter writer = new XmlInvoiceWriter();
             for (InvoiceRecord r : records) {
                 Path input = r.getSourceFile();
                 String fileName = input.getFileName().toString();
