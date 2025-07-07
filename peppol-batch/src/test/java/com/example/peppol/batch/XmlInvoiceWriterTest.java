@@ -15,7 +15,7 @@ import org.springframework.batch.item.Chunk;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
 @Slf4j
-class UblInvoiceWriterTest {
+class XmlInvoiceWriterTest {
 
     @Test
     void writesInvoiceToXmlString() throws Exception {
@@ -23,7 +23,7 @@ class UblInvoiceWriterTest {
         XmlInvoiceReader parser = new XmlInvoiceReader();
         InvoiceType invoice = parser.parse(xml);
 
-        UblInvoiceWriter writer = new UblInvoiceWriter();
+        XmlInvoiceWriter writer = new XmlInvoiceWriter();
         String out = writer.writeToString(invoice);
 
         Path outFile = Path.of("target", "generated-invoice.xml");
@@ -49,7 +49,7 @@ class UblInvoiceWriterTest {
         InvoiceType invoice = parser.parse(xml);
 
         Path outputDir = Files.createTempDirectory("invoice-item-writer");
-        UblInvoiceWriter writer = new UblInvoiceWriter(outputDir);
+        XmlInvoiceWriter writer = new XmlInvoiceWriter(outputDir);
         Chunk<InvoiceType> chunk = new Chunk<>();
         chunk.add(invoice);
         writer.write(chunk);
