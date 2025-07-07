@@ -26,9 +26,9 @@ class SpecificationsInvoiceTest {
         Optional<Path> example = findFirstXml(repo);
         assumeTrue(example.isPresent(), "No XML invoice found in repo");
 
-        InvoiceXmlFileReader reader = new InvoiceXmlFileReader(example.get().getParent());
-        InvoiceDocument doc = reader.read();
-        assertNotNull(doc);
+        String xml = Files.readString(example.get());
+        UblInvoiceParser parser = new UblInvoiceParser();
+        assertNotNull(parser.parse(xml));
     }
 
     @Test
@@ -39,9 +39,11 @@ class SpecificationsInvoiceTest {
         Optional<Path> example = findFirstXml(repo);
         assumeTrue(example.isPresent(), "No XML invoice found in repo");
 
-        InvoiceXmlFileReader reader = new InvoiceXmlFileReader(example.get().getParent());
-        InvoiceDocument doc = reader.read();
-        assertNotNull(doc);
+        String xml = Files.readString(example.get());
+        UblInvoiceParser parser = new UblInvoiceParser();
+        assertNotNull(parser.parse(xml));
+
+        InvoiceDocument doc = new InvoiceDocument(xml, example.get());
 
         Path outDir = Files.createTempDirectory("spec-invoice-out");
         InvoiceXmlWriter writer = new InvoiceXmlWriter(outDir);
