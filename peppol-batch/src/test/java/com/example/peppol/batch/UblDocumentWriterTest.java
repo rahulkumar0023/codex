@@ -32,4 +32,11 @@ class UblDocumentWriterTest {
         UblDocumentWriter.write(doc, DummyDoc.class, new QName("urn:test", "Dummy"), out);
         assertTrue(Files.exists(out));
     }
+
+    @Test
+    void addsXmlDeclarationWithStandaloneNo() throws Exception {
+        DummyDoc doc = new DummyDoc();
+        String xml = UblDocumentWriter.writeToString(doc, DummyDoc.class, new QName("urn:test", "Dummy"));
+        assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"));
+    }
 }
