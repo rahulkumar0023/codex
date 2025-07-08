@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
+import org.springframework.batch.core.scope.context.StepContext;
+import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.core.io.Resource;
 
 import jakarta.xml.bind.JAXBContext;
@@ -70,6 +72,10 @@ public class XmlInvoiceReader implements ResourceAwareItemReaderItemStream<Invoi
             return null;
         }
         try (InputStream in = resource.getInputStream()) {
+            StepContext ctx = StepSynchronizationManager.getContext();
+            if (ctx != null) {
+                ctx.getStepExecutionContext().put("current.file.path", resource.getFile().getAbsolutePath());
+            }
             read = true;
             return parse(in);
         }
