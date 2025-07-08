@@ -45,7 +45,7 @@ The XML files will be created in the `output` directory with the same file names
 
 The batch steps internally rely on `XmlInvoiceReader` to read each invoice into
 `InvoiceType` objects and `XmlInvoiceWriter` to write them back to XML.
-`XmlCreditNoteReader` and `UblCreditNoteWriter` provide the same functionality
+`XmlCreditNoteReader` and `XmlCreditNoteWriter` provide the same functionality
 for credit notes.
 
 
@@ -84,7 +84,7 @@ Similarly, credit notes can be handled with:
 ```java
 XmlCreditNoteReader cnParser = new XmlCreditNoteReader();
 CreditNoteType creditNote = cnParser.parse(xml);
-UblCreditNoteWriter cnWriter = new UblCreditNoteWriter();
+XmlCreditNoteWriter cnWriter = new XmlCreditNoteWriter();
 cnWriter.write(creditNote, Path.of("credit-note.xml"));
 ```
 
