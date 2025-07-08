@@ -1,16 +1,12 @@
 package com.example.peppol.batch;
 
-import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
+import com.example.peppol.batch.UblDocumentWriter;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
@@ -51,32 +47,10 @@ public class XmlInvoiceWriter implements ItemWriter<InvoiceType> {
      * @return XML representation
      */
     public String writeToString(InvoiceType invoice) {
-        try {
-            JAXBContext ctx = JAXBContext.newInstance(InvoiceType.class);
-            Marshaller marshaller = ctx.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UblNamespacePrefixMapper());
-
-            var ext = invoice.getUBLExtensions();
-            if (ext != null && ext.getUBLExtension().isEmpty()) {
-                invoice.setUBLExtensions(null);
-            }
-
-            StringWriter sw = new StringWriter();
-            JAXBElement<InvoiceType> root = new JAXBElement<>(
-                    new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
-                    InvoiceType.class, invoice);
-
-            marshaller.marshal(root, sw);
-
-            String xml = sw.toString();
-            if (ext == null || ext.getUBLExtension().isEmpty()) {
-                xml = xml.replaceAll(" xmlns:[^=]*=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\"", "");
-            }
-            return xml;
-        } catch (JAXBException e) {
-            throw new RuntimeException("Failed to marshal invoice", e);
-        }
+        return UblDocumentWriter.writeToString(
+                invoice,
+                InvoiceType.class,
+                new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"));
     }
 
     /**
@@ -86,11 +60,11 @@ public class XmlInvoiceWriter implements ItemWriter<InvoiceType> {
      * @param output  the target file path
      */
     public void write(InvoiceType invoice, Path output) {
-        try {
-            Files.writeString(output, writeToString(invoice));
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to write invoice to " + output, e);
-        }
+        UblDocumentWriter.write(
+                invoice,
+                InvoiceType.class,
+                new QName("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice"),
+                output);
     }
 
     @Override
