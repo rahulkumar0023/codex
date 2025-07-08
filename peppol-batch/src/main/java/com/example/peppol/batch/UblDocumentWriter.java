@@ -33,6 +33,7 @@ public final class UblDocumentWriter {
             Marshaller marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UblNamespacePrefixMapper());
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
 
             Object extensions = type.getMethod("getUBLExtensions").invoke(document);
             boolean emptyExtensions = false;
@@ -46,6 +47,7 @@ public final class UblDocumentWriter {
             }
 
             StringWriter sw = new StringWriter();
+            sw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
             JAXBElement<T> root = new JAXBElement<>(qName, type, document);
             marshaller.marshal(root, sw);
 
