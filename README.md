@@ -8,7 +8,6 @@ Sample invoice XML files are located under `peppol-batch/src/test/resources`. In
 
 The `peppol-batch/pom.xml` file declares the dependencies needed for the batch job:
 - `spring-boot-starter-batch` and `spring-boot-starter` provide Spring Batch support.
-- `pdfbox` enables extracting embedded XML from PDFs.
 - `spring-boot-starter-test` supplies JUnit for tests.
 - `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
 
@@ -122,9 +121,9 @@ approach:
    JAXB classes generated from the PEPPOL UBL 2.1 schemas.
 4. **Process invoices** as needed. The reference code simply re‑marshals them
    without writing to a database.
-5. **Write results** to `/tmp/processed/xml` and generate placeholder PDFs in
-   `/tmp/processed/pdf`. A `NamespacePrefixMapper` ensures that the output uses
-   the standard `cac` and `cbc` prefixes with no `nsXX` namespaces.
+5. **Write results** to `/tmp/processed/xml`. A `NamespacePrefixMapper`
+   ensures that the output uses the standard `cac` and `cbc` prefixes with no
+   `nsXX` namespaces.
 6. **Upload or deliver** the processed files if required.
 7. **Clean up** temporary directories so every job run starts with a clean
    workspace.
