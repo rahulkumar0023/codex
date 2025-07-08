@@ -33,15 +33,16 @@ public class CleanupTasklet implements Tasklet {
         if (!Files.exists(dir)) {
             return;
         }
+        List<Path> paths;
         try (Stream<Path> s = Files.walk(dir)) {
-            s.sorted(Comparator.reverseOrder())
-             .forEach(p -> {
-                 try {
-                     Files.deleteIfExists(p);
-                 } catch (IOException e) {
-                     // ignore cleanup failures
-                 }
-             });
+            paths = s.sorted(Comparator.reverseOrder()).toList();
+        }
+        for (Path p : paths) {
+            try {
+                Files.deleteIfExists(p);
+            } catch (IOException e) {
+                // ignore cleanup failures
+            }
         }
     }
 }
