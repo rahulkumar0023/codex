@@ -21,9 +21,6 @@ import org.springframework.core.io.Resource;
 import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
 import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
 import com.example.peppol.batch.tasklet.CleanupTasklet;
-import com.example.peppol.batch.InvoiceXmlWriter;
-import com.example.peppol.batch.InvoiceDocument;
-import com.example.peppol.batch.PdfInvoiceXmlReader;
 import com.example.peppol.batch.XmlInvoiceReader;
 import com.example.peppol.batch.XmlCreditNoteReader;
 import com.example.peppol.batch.XmlInvoiceWriter;
@@ -46,7 +43,6 @@ public class BatchConfig {
                              Step fetchStep,
                              Step xmlInvoiceStep,
                              Step xmlCreditNoteStep,
-                             Step pdfInvoiceStep,
                              Step packageAndUploadStep,
                              Step cleanupStep) {
         return jobs.get("processingJob")
@@ -54,7 +50,6 @@ public class BatchConfig {
                 .start(fetchStep)
                 .next(xmlInvoiceStep)
                 .next(xmlCreditNoteStep)
-                .next(pdfInvoiceStep)
                 .next(packageAndUploadStep)
                 .next(cleanupStep)
                 .build();
@@ -111,17 +106,6 @@ public class BatchConfig {
         return steps.get("xmlCreditNoteStep")
                 .<CreditNoteType, CreditNoteType>chunk(5)
                 .reader(xmlCreditNoteReader)
-                .writer(writer)
-                .build();
-    }
-
-    @Bean
-    public Step pdfInvoiceStep(StepBuilderFactory steps) {
-        PdfInvoiceXmlReader reader = new PdfInvoiceXmlReader(Path.of("tmp/unzipped"));
-        InvoiceXmlWriter writer = new InvoiceXmlWriter(Path.of("tmp/processed/pdf"));
-        return steps.get("pdfInvoiceStep")
-                .<InvoiceDocument, InvoiceDocument>chunk(5)
-                .reader(reader)
                 .writer(writer)
                 .build();
     }
