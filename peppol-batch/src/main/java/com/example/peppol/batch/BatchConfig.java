@@ -16,6 +16,7 @@ import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.Resource;
 
 import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
 import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
@@ -74,8 +75,13 @@ public class BatchConfig {
     @Bean
     public MultiResourceItemReader<InvoiceType> xmlInvoiceReader() throws IOException {
         MultiResourceItemReader<InvoiceType> reader = new MultiResourceItemReader<>();
-        reader.setResources(new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*INV*.xml"));
+        Resource[] allXml = new PathMatchingResourcePatternResolver()
+                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*.xml");
+        Resource[] invoiceResources = Arrays.stream(allXml)
+                .filter(r -> r.getFilename() != null
+                        && r.getFilename().toLowerCase().contains("inv"))
+                .toArray(Resource[]::new);
+        reader.setResources(invoiceResources);
         reader.setDelegate(new XmlInvoiceReader());
         return reader;
     }
