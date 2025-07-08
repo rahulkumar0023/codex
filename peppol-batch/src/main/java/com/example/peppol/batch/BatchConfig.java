@@ -2,7 +2,9 @@ package com.example.peppol.batch;
 
 import java.nio.file.Path;
 import java.io.IOException;
+import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -125,8 +127,12 @@ public class BatchConfig {
     }
 
     @Bean
-    public Step cleanupStep(StepBuilderFactory steps) {
-        Tasklet tasklet = new CleanupTasklet(Path.of("tmp"), Path.of("upload"));
+    public Step cleanupStep(StepBuilderFactory steps,
+                            @Value("${cleanup.dirs}") String[] cleanupDirs) {
+        Path[] paths = Arrays.stream(cleanupDirs)
+                .map(Path::of)
+                .toArray(Path[]::new);
+        Tasklet tasklet = new CleanupTasklet(paths);
         return steps.get("cleanupStep").tasklet(tasklet).build();
     }
 
