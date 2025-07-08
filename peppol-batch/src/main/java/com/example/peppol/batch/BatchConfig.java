@@ -24,7 +24,7 @@ import com.example.peppol.batch.PdfInvoiceXmlReader;
 import com.example.peppol.batch.XmlInvoiceReader;
 import com.example.peppol.batch.XmlCreditNoteReader;
 import com.example.peppol.batch.XmlInvoiceWriter;
-import com.example.peppol.batch.XmlCreditNoteItemWriter;
+import com.example.peppol.batch.XmlCreditNoteWriter;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 
@@ -99,7 +99,7 @@ public class BatchConfig {
 
     @Bean
     public Step xmlCreditNoteStep(StepBuilderFactory steps, MultiResourceItemReader<CreditNoteType> xmlCreditNoteReader) {
-        XmlCreditNoteItemWriter writer = new XmlCreditNoteItemWriter(Path.of("tmp/processed/xml"));
+        XmlCreditNoteWriter writer = new XmlCreditNoteWriter(Path.of("tmp/processed/xml"));
         return steps.get("xmlCreditNoteStep")
                 .<CreditNoteType, CreditNoteType>chunk(5)
                 .reader(xmlCreditNoteReader)
