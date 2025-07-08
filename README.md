@@ -97,13 +97,13 @@ To try additional invoice examples, clone the specifications repository next to 
 git clone https://github.com/OxalisCommunity/peppol-specifications.git
 ```
 
-After cloning, run the batch job pointing the `input` directory at one of the XML files from the cloned repository. You can also run the test `SpecificationsInvoiceTest` by providing the repository location using the `peppolSpecDir` system property:
+After cloning, run the batch job pointing the `input` directory at one of the XML files from the cloned repository. You can also run the test `XmlInvoiceTest` by providing the repository location using the `peppolSpecDir` system property:
 
 ```bash
 mvn test -DpeppolSpecDir=../peppol-specifications
 ```
 
-The `SpecificationsInvoiceTest` reads the first XML file it can find in the
+The `XmlInvoiceTest` reads the first XML file it can find in the
 cloned repository and writes the invoice to a temporary directory. The output
 path is reported by the test and the file contents should match the original
 invoice.

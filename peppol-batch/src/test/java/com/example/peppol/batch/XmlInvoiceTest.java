@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.batch.item.Chunk;
+import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * Reads an invoice sample from the Oxalis peppol-specifications repository if present.
  * The repository location can be provided using the system property 'peppolSpecDir'.
  */
-class SpecificationsInvoiceTest {
+class XmlInvoiceTest {
 
     @Test
     void readsInvoiceFromSpecificationsRepo() throws Exception {
@@ -28,7 +29,8 @@ class SpecificationsInvoiceTest {
 
         String xml = Files.readString(example.get());
         XmlInvoiceReader parser = new XmlInvoiceReader();
-        assertNotNull(parser.parse(xml));
+        InvoiceType invoice = parser.parse(xml);
+        assertNotNull(invoice);
     }
 
     @Test
@@ -41,17 +43,16 @@ class SpecificationsInvoiceTest {
 
         String xml = Files.readString(example.get());
         XmlInvoiceReader parser = new XmlInvoiceReader();
-        assertNotNull(parser.parse(xml));
-
-        InvoiceDocument doc = new InvoiceDocument(xml, example.get());
+        InvoiceType invoice = parser.parse(xml);
+        assertNotNull(invoice);
 
         Path outDir = Files.createTempDirectory("spec-invoice-out");
-        InvoiceXmlWriter writer = new InvoiceXmlWriter(outDir);
-        Chunk<InvoiceDocument> chunk = new Chunk<>();
-        chunk.add(doc);
+        XmlInvoiceWriter writer = new XmlInvoiceWriter(outDir);
+        Chunk<InvoiceType> chunk = new Chunk<>();
+        chunk.add(invoice);
         writer.write(chunk);
 
-        Path written = outDir.resolve(example.get().getFileName());
+        Path written = outDir.resolve(invoice.getID().getValue() + ".xml");
         assumeTrue(Files.exists(written), "invoice not written" );
     }
 
