@@ -47,7 +47,15 @@ public class FetchDecryptUnzipTasklet implements Tasklet {
                 if (entry.isDirectory()) {
                     continue;
                 }
-                Path out = workDir.resolve(entry.getName());
+                String filename = Paths.get(entry.getName()).getFileName().toString();
+                Path targetDir = workDir;
+                String lower = filename.toLowerCase();
+                if (lower.endsWith(".xml")) {
+                    targetDir = workDir.resolve("xml");
+                } else if (lower.endsWith(".csv")) {
+                    targetDir = workDir.resolve("csv");
+                }
+                Path out = targetDir.resolve(filename);
                 Files.createDirectories(out.getParent());
                 Files.copy(zis, out, StandardCopyOption.REPLACE_EXISTING);
             }
