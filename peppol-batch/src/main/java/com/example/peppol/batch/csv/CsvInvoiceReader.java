@@ -35,28 +35,38 @@ public class CsvInvoiceReader implements ResourceAwareItemReaderItemStream<CsvIn
             return null;
         }
         if (reader == null) {
-            reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            try {
+                reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                log.error("Failed to open resource {}", resource, e);
+                throw new ItemStreamException("Failed to open resource " + resource, e);
+            }
         }
         String line;
-        while ((line = reader.readLine()) != null) {
-            if (!headerParsed) {
-                headerParsed = true;
-                headers = java.util.Arrays.asList(line.split(";", -1));
-                continue;
+        try {
+            while ((line = reader.readLine()) != null) {
+                if (!headerParsed) {
+                    headerParsed = true;
+                    headers = java.util.Arrays.asList(line.split(";", -1));
+                    continue;
+                }
+                if (line.isBlank()) {
+                    continue;
+                }
+                String[] parts = line.split(";", -1);
+                java.util.Map<String,String> map = new java.util.LinkedHashMap<>();
+                for (int i = 0; i < headers.size() && i < parts.length; i++) {
+                    map.put(headers.get(i), parts[i]);
+                }
+                CsvInvoiceRecord rec = CsvInvoiceRecord.builder()
+                        .fields(map)
+                        .build();
+                log.debug("Read record: {}", rec);
+                return rec;
             }
-            if (line.isBlank()) {
-                continue;
-            }
-            String[] parts = line.split(";", -1);
-            java.util.Map<String,String> map = new java.util.LinkedHashMap<>();
-            for (int i = 0; i < headers.size() && i < parts.length; i++) {
-                map.put(headers.get(i), parts[i]);
-            }
-            CsvInvoiceRecord rec = CsvInvoiceRecord.builder()
-                    .fields(map)
-                    .build();
-            log.debug("Read record: {}", rec);
-            return rec;
+        } catch (IOException e) {
+            log.error("Failed to read CSV from {}", resource, e);
+            throw new ItemStreamException("Failed to read CSV", e);
         }
         return null;
     }
@@ -77,9 +87,11 @@ public class CsvInvoiceReader implements ResourceAwareItemReaderItemStream<CsvIn
             try {
                 reader.close();
             } catch (IOException e) {
-                // ignore
+                log.warn("Error closing reader for {}", resource, e);
+                throw new ItemStreamException("Failed to close reader", e);
+            } finally {
+                reader = null;
             }
-            reader = null;
         }
     }
 }

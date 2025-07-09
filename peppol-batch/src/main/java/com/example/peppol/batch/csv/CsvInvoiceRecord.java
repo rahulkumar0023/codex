@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple DTO representing a CSV invoice row.
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
  * standard getters, setters and builder API.
  * </p>
  */
+@Slf4j
 @Data
 @Builder
 @NoArgsConstructor
@@ -77,6 +79,8 @@ public class CsvInvoiceRecord {
 
     /** Generic accessor by header name. */
     public String getField(String name) {
-        return fields != null ? fields.get(name) : null;
+        String value = fields != null ? fields.get(name) : null;
+        log.debug("Accessing field '{}': {}", name, value);
+        return value;
     }
 }
