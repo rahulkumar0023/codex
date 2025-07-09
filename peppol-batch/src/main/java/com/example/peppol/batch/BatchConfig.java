@@ -25,6 +25,9 @@ import com.example.peppol.batch.XmlInvoiceReader;
 import com.example.peppol.batch.XmlCreditNoteReader;
 import com.example.peppol.batch.XmlInvoiceWriter;
 import com.example.peppol.batch.XmlCreditNoteWriter;
+import com.example.peppol.batch.csv.CsvInvoiceReader;
+import com.example.peppol.batch.csv.CsvInvoiceProcessor;
+import com.example.peppol.batch.csv.CsvInvoiceRecord;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 
@@ -55,6 +58,24 @@ public class BatchConfig {
                 .build();
     }
 
+    /**
+     * Variant job that reads invoices from CSV files and writes them to XML.
+     */
+    @Bean
+    public Job csvProcessingJob(JobBuilderFactory jobs,
+                                Step fetchStep,
+                                Step csvInvoiceStep,
+                                Step packageAndUploadStep,
+                                Step cleanupStep) {
+        return jobs.get("csvProcessingJob")
+                .incrementer(new RunIdIncrementer())
+                .start(fetchStep)
+                .next(csvInvoiceStep)
+                .next(packageAndUploadStep)
+                .next(cleanupStep)
+                .build();
+    }
+
 
 
     // ---------------------------------------------------------------------
@@ -71,7 +92,7 @@ public class BatchConfig {
     public MultiResourceItemReader<InvoiceType> xmlInvoiceReader() throws IOException {
         MultiResourceItemReader<InvoiceType> reader = new MultiResourceItemReader<>();
         Resource[] allXml = new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*.xml");
+                .getResources("file:" + Path.of("tmp/unzipped/xml").toAbsolutePath() + "/*.xml");
         Resource[] invoiceResources = Arrays.stream(allXml)
                 .filter(r -> r.getFilename() != null
                         && r.getFilename().toLowerCase().contains("inv"))
@@ -95,7 +116,7 @@ public class BatchConfig {
     public MultiResourceItemReader<CreditNoteType> xmlCreditNoteReader() throws IOException {
         MultiResourceItemReader<CreditNoteType> reader = new MultiResourceItemReader<>();
         reader.setResources(new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped").toAbsolutePath() + "/*CN*.xml"));
+                .getResources("file:" + Path.of("tmp/unzipped/xml").toAbsolutePath() + "/*CN*.xml"));
         reader.setDelegate(new XmlCreditNoteReader());
         return reader;
     }
@@ -106,6 +127,28 @@ public class BatchConfig {
         return steps.get("xmlCreditNoteStep")
                 .<CreditNoteType, CreditNoteType>chunk(5)
                 .reader(xmlCreditNoteReader)
+                .writer(writer)
+                .build();
+    }
+
+    @Bean
+    public MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader() throws IOException {
+        MultiResourceItemReader<CsvInvoiceRecord> reader = new MultiResourceItemReader<>();
+        reader.setResources(new PathMatchingResourcePatternResolver()
+                .getResources("file:" + Path.of("tmp/unzipped/csv").toAbsolutePath() + "/*.csv"));
+        reader.setDelegate(new CsvInvoiceReader());
+        return reader;
+    }
+
+    @Bean
+    public Step csvInvoiceStep(StepBuilderFactory steps,
+                               MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader) {
+        CsvInvoiceProcessor processor = new CsvInvoiceProcessor();
+        XmlInvoiceWriter writer = new XmlInvoiceWriter(Path.of("tmp/processed/xml"));
+        return steps.get("csvInvoiceStep")
+                .<CsvInvoiceRecord, InvoiceType>chunk(5)
+                .reader(csvInvoiceReader)
+                .processor(processor)
                 .writer(writer)
                 .build();
     }
