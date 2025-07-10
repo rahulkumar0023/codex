@@ -22,6 +22,25 @@ public class CsvInvoiceReader implements ResourceAwareItemReaderItemStream<CsvIn
     private boolean headerParsed;
     private java.util.List<String> headers;
 
+    private java.util.List<String> parseLine(String line) {
+        java.util.List<String> result = new java.util.ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean inQuotes = false;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == '"') {
+                inQuotes = !inQuotes;
+            } else if (c == ';' && !inQuotes) {
+                result.add(sb.toString());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        result.add(sb.toString());
+        return result;
+    }
+
     @Override
     public void setResource(Resource resource) {
         this.resource = resource;
@@ -47,16 +66,16 @@ public class CsvInvoiceReader implements ResourceAwareItemReaderItemStream<CsvIn
             while ((line = reader.readLine()) != null) {
                 if (!headerParsed) {
                     headerParsed = true;
-                    headers = java.util.Arrays.asList(line.split(";", -1));
+                    headers = parseLine(line);
                     continue;
                 }
                 if (line.isBlank()) {
                     continue;
                 }
-                String[] parts = line.split(";", -1);
+                java.util.List<String> parts = parseLine(line);
                 java.util.Map<String,String> map = new java.util.LinkedHashMap<>();
-                for (int i = 0; i < headers.size() && i < parts.length; i++) {
-                    map.put(headers.get(i), parts[i]);
+                for (int i = 0; i < headers.size() && i < parts.size(); i++) {
+                    map.put(headers.get(i), parts.get(i));
                 }
                 CsvInvoiceRecord rec = CsvInvoiceRecord.builder()
                         .fields(map)
