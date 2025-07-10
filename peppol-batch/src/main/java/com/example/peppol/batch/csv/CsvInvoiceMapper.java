@@ -2,6 +2,11 @@ package com.example.peppol.batch.csv;
 
 import org.mapstruct.*;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.CustomizationIDType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.DocumentCurrencyCodeType;
@@ -93,21 +98,21 @@ public interface CsvInvoiceMapper {
     default IssueDateType toIssueDate(String value) {
         if (value == null) return null;
         IssueDateType t = new IssueDateType();
-        t.setValue(java.time.LocalDate.parse(value));
+        t.setValue(toXmlDate(value));
         return t;
     }
 
     default DueDateType toDueDate(String value) {
         if (value == null) return null;
         DueDateType t = new DueDateType();
-        t.setValue(java.time.LocalDate.parse(value));
+        t.setValue(toXmlDate(value));
         return t;
     }
 
     default TaxPointDateType toTaxPointDate(String value) {
         if (value == null) return null;
         TaxPointDateType t = new TaxPointDateType();
-        t.setValue(java.time.LocalDate.parse(value));
+        t.setValue(toXmlDate(value));
         return t;
     }
 
@@ -123,5 +128,19 @@ public interface CsvInvoiceMapper {
         TaxCurrencyCodeType t = new TaxCurrencyCodeType();
         t.setValue(value);
         return t;
+    }
+
+    private XMLGregorianCalendar toXmlDate(String value) {
+        java.time.LocalDate local = java.time.LocalDate.parse(value);
+        try {
+            return DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendarDate(
+                            local.getYear(),
+                            local.getMonthValue(),
+                            local.getDayOfMonth(),
+                            DatatypeConstants.FIELD_UNDEFINED);
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
