@@ -19,9 +19,9 @@ public interface CsvInvoiceMapper {
     CsvInvoiceMapper INSTANCE = Mappers.getMapper(CsvInvoiceMapper.class);
 
     @Mapping(target = "ID", expression = "java(toID(item.getId()))")
-    @Mapping(target = "CustomizationID", expression = "java(toCustomizationID(item.getCustomizationId()))")
-    @Mapping(target = "ProfileID", expression = "java(toProfileID(item.getProfileId()))")
-    @Mapping(target = "InvoiceTypeCode", expression = "java(toInvoiceTypeCode(item.getInvoiceTypeCode()))")
+    @Mapping(target = "customizationID", expression = "java(toCustomizationID(item.getCustomizationId()))")
+    @Mapping(target = "profileID", expression = "java(toProfileID(item.getProfileId()))")
+    @Mapping(target = "invoiceTypeCode", expression = "java(toInvoiceTypeCode(item.getInvoiceTypeCode()))")
     @Mapping(target = "note", expression = "java(item.getNote() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(java.util.Collections.singletonList(toNote(item.getNote()))))")
     InvoiceType toInvoice(CsvInvoiceRecord item);
 
