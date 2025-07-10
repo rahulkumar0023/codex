@@ -35,6 +35,11 @@ class CsvInvoiceProcessorTest {
         assertEquals("TickstarAP-BIS3-test-01", invoice.getID().getValue());
         assertEquals("urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0",
                 invoice.getCustomizationID().getValue());
+        assertEquals(java.time.LocalDate.parse("2023-12-19"), invoice.getIssueDate().getValue());
+        assertEquals(java.time.LocalDate.parse("2024-01-18"), invoice.getDueDate().getValue());
+        assertEquals(java.time.LocalDate.parse("2023-12-19"), invoice.getTaxPointDate().getValue());
+        assertEquals("EUR", invoice.getDocumentCurrencyCode().getValue());
+        assertEquals("SEK", invoice.getTaxCurrencyCode().getValue());
         assertEquals("CHS123",
                 invoice.getInvoiceLine().get(0).getItem().getAdditionalItemProperty().get(0).getValue().getValue());
     }
