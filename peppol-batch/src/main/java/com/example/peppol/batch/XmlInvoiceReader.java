@@ -74,7 +74,8 @@ public class XmlInvoiceReader implements ResourceAwareItemReaderItemStream<Invoi
         try (InputStream in = resource.getInputStream()) {
             StepContext ctx = StepSynchronizationManager.getContext();
             if (ctx != null) {
-                ctx.getStepExecutionContext().put("current.file.path", resource.getFile().getAbsolutePath());
+                ctx.getStepExecution().getExecutionContext()
+                        .put("current.file.path", resource.getFile().getAbsolutePath());
             }
             read = true;
             return parse(in);
