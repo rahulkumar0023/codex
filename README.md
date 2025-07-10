@@ -9,7 +9,8 @@ Sample invoice XML files are located under `peppol-batch/src/test/resources`. In
 The `peppol-batch/pom.xml` file declares the dependencies needed for the batch job:
 - `spring-boot-starter-batch` and `spring-boot-starter` provide Spring Batch support.
 - `spring-boot-starter-test` supplies JUnit for tests.
-- `peppol-ubl21` provides JAXB classes for working with UBL 2.1 invoices.
+- UBL 2.1 JAXB classes are generated locally from the schemas using
+  the `jaxb-maven-plugin`.
 
 - `jakarta.xml.bind-api` and `jaxb-runtime` bring in Jakarta JAXB 4 so the code
   compiles on Java 17.
@@ -52,8 +53,8 @@ for credit notes.
 
 ## Parsing invoices to Java objects
 
-The project includes a simple `XmlInvoiceReader` that uses the `peppol-ubl21`
-library to convert invoice XML into JAXB classes. The following snippet parses
+The project includes a simple `XmlInvoiceReader` that relies on JAXB classes
+generated from the UBL 2.1 schemas. The following snippet parses
 
 
 an invoice and prints its ID:
@@ -63,6 +64,12 @@ String xml = Files.readString(Path.of("complex-invoice.xml"));
 XmlInvoiceReader parser = new XmlInvoiceReader();
 InvoiceType invoice = parser.parse(xml);
 System.out.println(invoice.getID().getValue());
+
+// access a custom chassis property on the first invoice line
+var itemProp = invoice.getInvoiceLine().get(0)
+        .getItem().getAdditionalItemProperty().get(0);
+System.out.println(itemProp.getName().getValue()
+        + "=" + itemProp.getValue().getValue());
 ```
 
 Once an `InvoiceType` object is available it can be written back to XML using
