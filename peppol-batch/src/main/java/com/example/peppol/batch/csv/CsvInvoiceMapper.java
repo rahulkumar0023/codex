@@ -2,18 +2,19 @@ package com.example.peppol.batch.csv;
 
 import org.mapstruct.*;
 
-import network.oxalis.peppol.ubl2.jaxb.CustomizationIDType;
-import network.oxalis.peppol.ubl2.jaxb.IDType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.CustomizationIDType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.IDType;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
-import network.oxalis.peppol.ubl2.jaxb.InvoiceTypeCodeType;
-import network.oxalis.peppol.ubl2.jaxb.NoteType;
-import network.oxalis.peppol.ubl2.jaxb.ProfileIDType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.InvoiceTypeCodeType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.NoteType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.ProfileIDType;
+import org.mapstruct.factory.Mappers;
 
 /**
  * MapStruct mapper converting {@link CsvInvoiceRecord} instances to
  * {@link InvoiceType}.
  */
-@Mapper
+@Mapper(builder = @Builder(disableBuilder = true))
 public interface CsvInvoiceMapper {
     CsvInvoiceMapper INSTANCE = Mappers.getMapper(CsvInvoiceMapper.class);
 
@@ -30,13 +31,13 @@ public interface CsvInvoiceMapper {
         if (val == null) {
             return;
         }
-        network.oxalis.peppol.ubl2.jaxb.InvoiceLineType line = new network.oxalis.peppol.ubl2.jaxb.InvoiceLineType();
-        network.oxalis.peppol.ubl2.jaxb.ItemType itemType = new network.oxalis.peppol.ubl2.jaxb.ItemType();
-        network.oxalis.peppol.ubl2.jaxb.ItemPropertyType prop = new network.oxalis.peppol.ubl2.jaxb.ItemPropertyType();
-        network.oxalis.peppol.ubl2.jaxb.NameType name = new network.oxalis.peppol.ubl2.jaxb.NameType();
+        network.oxalis.peppol.ubl2.jaxb.cac.InvoiceLineType line = new network.oxalis.peppol.ubl2.jaxb.cac.InvoiceLineType();
+        network.oxalis.peppol.ubl2.jaxb.cac.ItemType itemType = new network.oxalis.peppol.ubl2.jaxb.cac.ItemType();
+        network.oxalis.peppol.ubl2.jaxb.cac.ItemPropertyType prop = new network.oxalis.peppol.ubl2.jaxb.cac.ItemPropertyType();
+        network.oxalis.peppol.ubl2.jaxb.cbc.NameType name = new network.oxalis.peppol.ubl2.jaxb.cbc.NameType();
         name.setValue("chassis");
         prop.setName(name);
-        network.oxalis.peppol.ubl2.jaxb.ValueType value = new network.oxalis.peppol.ubl2.jaxb.ValueType();
+        network.oxalis.peppol.ubl2.jaxb.cbc.ValueType value = new network.oxalis.peppol.ubl2.jaxb.cbc.ValueType();
         value.setValue(val);
         prop.setValue(value);
         itemType.getAdditionalItemProperty().add(prop);
