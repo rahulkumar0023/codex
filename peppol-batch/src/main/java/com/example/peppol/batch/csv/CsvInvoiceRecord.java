@@ -72,6 +72,31 @@ public class CsvInvoiceRecord {
         return getField("TaxCurrencyCode");
     }
 
+    /** Convenience accessor for UBLVersionID */
+    public String getUblVersionId() {
+        return getField("UBLVersionID");
+    }
+
+    /** Convenience accessor for ProfileExecutionID */
+    public String getProfileExecutionId() {
+        return getField("ProfileExecutionID");
+    }
+
+    /** Convenience accessor for CopyIndicator */
+    public String getCopyIndicator() {
+        return getField("CopyIndicator");
+    }
+
+    /** Convenience accessor for UUID */
+    public String getUuid() {
+        return getField("UUID");
+    }
+
+    /** Convenience accessor for IssueTime */
+    public String getIssueTime() {
+        return getField("IssueTime");
+    }
+
     /** Accessor for the chassis value example. */
     public String getChassisValue() {
         return getField("AdditionalItemProperty_cbc_chassisValue");

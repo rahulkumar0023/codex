@@ -2,6 +2,8 @@ package com.example.peppol.batch.csv;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -50,6 +52,13 @@ class CsvInvoiceProcessorTest {
         assertEquals("SEK", invoice.getTaxCurrencyCode().getValue());
         assertEquals("CHS123",
                 invoice.getInvoiceLine().get(0).getItem().getAdditionalItemProperty().get(0).getValue().getValue());
+        assertNotNull(invoice.getUBLExtensions());
+        assertTrue(invoice.getUBLExtensions().getUBLExtension().isEmpty());
+        assertNull(invoice.getUBLVersionID());
+        assertNull(invoice.getProfileExecutionID());
+        assertNull(invoice.getCopyIndicator());
+        assertNull(invoice.getUUID());
+        assertNull(invoice.getIssueTime());
     }
 
     private XMLGregorianCalendar toXmlDate(String value) throws DatatypeConfigurationException {
