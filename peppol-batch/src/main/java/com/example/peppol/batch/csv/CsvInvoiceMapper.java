@@ -23,7 +23,7 @@ import network.oxalis.peppol.ubl2.jaxb.cbc.TaxCurrencyCodeType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.TaxPointDateType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.UBLVersionIDType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.UUIDType;
-import network.oxalis.peppol.ubl2.jaxb.UBLExtensionsType;
+import network.oxalis.peppol.ubl2.jaxb.ecdt.UBLExtensionsType;
 import org.mapstruct.factory.Mappers;
 
 /**
