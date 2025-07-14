@@ -142,8 +142,8 @@ public class BatchConfig {
 
     @Bean
     public Step csvInvoiceStep(StepBuilderFactory steps,
-                               MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader) {
-        CsvInvoiceProcessor processor = new CsvInvoiceProcessor();
+                               MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader,
+                               CsvInvoiceProcessor processor) {
         XmlInvoiceWriter writer = new XmlInvoiceWriter(Path.of("tmp/processed/xml"));
         return steps.get("csvInvoiceStep")
                 .<CsvInvoiceRecord, InvoiceType>chunk(5)
