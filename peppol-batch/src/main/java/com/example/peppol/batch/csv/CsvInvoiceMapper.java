@@ -18,6 +18,8 @@ import network.oxalis.peppol.ubl2.jaxb.cbc.NoteType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.ProfileIDType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.TaxCurrencyCodeType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.TaxPointDateType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.AccountingCostType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.BuyerReferenceType;
 
 import network.oxalis.peppol.ubl2.jaxb.ecdt.UBLExtensionsType;
 
@@ -37,6 +39,8 @@ public interface CsvInvoiceMapper {
     @Mapping(target = "taxPointDate", expression = "java(toTaxPointDate(item.getTaxPointDate()))")
     @Mapping(target = "documentCurrencyCode", expression = "java(toDocumentCurrencyCode(item.getDocumentCurrencyCode()))")
     @Mapping(target = "taxCurrencyCode", expression = "java(toTaxCurrencyCode(item.getTaxCurrencyCode()))")
+    @Mapping(target = "accountingCost", expression = "java(toAccountingCost(item.getAccountingCost()))")
+    @Mapping(target = "buyerReference", expression = "java(toBuyerReference(item.getBuyerReference()))")
     @Mapping(target = "UBLExtensions", expression = "java(emptyExtensions())")
     @Mapping(target = "note", expression = "java(item.getNote() == null ? new java.util.ArrayList<>() : new java.util.ArrayList<>(java.util.Collections.singletonList(toNote(item.getNote()))))")
     InvoiceType toInvoice(CsvInvoiceRecord item);
@@ -108,6 +112,20 @@ public interface CsvInvoiceMapper {
     default TaxCurrencyCodeType toTaxCurrencyCode(String value) {
         if (value == null) return null;
         TaxCurrencyCodeType t = new TaxCurrencyCodeType();
+        t.setValue(value);
+        return t;
+    }
+
+    default AccountingCostType toAccountingCost(String value) {
+        if (value == null) return null;
+        AccountingCostType t = new AccountingCostType();
+        t.setValue(value);
+        return t;
+    }
+
+    default BuyerReferenceType toBuyerReference(String value) {
+        if (value == null) return null;
+        BuyerReferenceType t = new BuyerReferenceType();
         t.setValue(value);
         return t;
     }
