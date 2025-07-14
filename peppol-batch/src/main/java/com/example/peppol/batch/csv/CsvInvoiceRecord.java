@@ -1,111 +1,148 @@
 package com.example.peppol.batch.csv;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.Map;
 
 /**
- * Simple DTO representing a CSV invoice row.
- * <p>
- * Using Lombok keeps the class concise while still exposing the
- * standard getters, setters and builder API.
- * </p>
+ * Strongly typed representation of a CSV invoice row.
  */
-@Slf4j
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CsvInvoiceRecord {
-
-    /**
-     * Parsed CSV fields keyed by column header.
-     * The standard invoice header columns such as CustomizationID,
-     * ProfileID and ID can be accessed via the convenience getters.
-     */
-    private Map<String, String> fields;
-
-    /** Convenience accessor for CustomizationID */
-    public String getCustomizationId() {
-        return getField("CustomizationID");
-    }
-
-    /** Convenience accessor for ProfileID */
-    public String getProfileId() {
-        return getField("ProfileID");
-    }
-
-    /** Convenience accessor for invoice ID */
-    public String getId() {
-        return getField("ID");
-    }
-
-    public String getIssueDate() {
-        return getField("IssueDate");
-    }
-
-    public String getDueDate() {
-        return getField("DueDate");
-    }
-
-    public String getInvoiceTypeCode() {
-        return getField("InvoiceTypeCode");
-    }
-
-    public String getNote() {
-        return getField("Note");
-    }
-
-    public String getTaxPointDate() {
-        return getField("TaxPointDate");
-    }
-
-    public String getDocumentCurrencyCode() {
-        return getField("DocumentCurrencyCode");
-    }
-
-    public String getTaxCurrencyCode() {
-        return getField("TaxCurrencyCode");
-    }
-
-    /** Convenience accessor for UBLVersionID */
-    public String getUblVersionId() {
-        return getField("UBLVersionID");
-    }
-
-    /** Convenience accessor for ProfileExecutionID */
-    public String getProfileExecutionId() {
-        return getField("ProfileExecutionID");
-    }
-
-    /** Convenience accessor for CopyIndicator */
-    public String getCopyIndicator() {
-        return getField("CopyIndicator");
-    }
-
-    /** Convenience accessor for UUID */
-    public String getUuid() {
-        return getField("UUID");
-    }
-
-    /** Convenience accessor for IssueTime */
-    public String getIssueTime() {
-        return getField("IssueTime");
-    }
-
-    /** Accessor for the chassis value example. */
-    public String getChassisValue() {
-        return getField("AdditionalItemProperty_cbc_chassisValue");
-    }
-
-    /** Generic accessor by header name. */
-    public String getField(String name) {
-        String value = fields != null ? fields.get(name) : null;
-        log.debug("Accessing field '{}': {}", name, value);
-        return value;
-    }
+    @CsvBindByName(column = "CustomizationID")
+    private String customizationID;
+    @CsvBindByName(column = "ProfileID")
+    private String profileID;
+    @CsvBindByName(column = "ID")
+    private String id;
+    @CsvBindByName(column = "IssueDate")
+    private String issueDate;
+    @CsvBindByName(column = "DueDate")
+    private String dueDate;
+    @CsvBindByName(column = "InvoiceTypeCode")
+    private String invoiceTypeCode;
+    @CsvBindByName(column = "Note")
+    private String note;
+    @CsvBindByName(column = "TaxPointDate")
+    private String taxPointDate;
+    @CsvBindByName(column = "DocumentCurrencyCode")
+    private String documentCurrencyCode;
+    @CsvBindByName(column = "TaxCurrencyCode")
+    private String taxCurrencyCode;
+    // additional fields from the extensive header
+    @CsvBindByName(column = "AccountingCost")
+    private String accountingCost;
+    @CsvBindByName(column = "BuyerReference")
+    private String buyerReference;
+    @CsvBindByName(column = "InvoicePeriod_StartDate")
+    private String invoicePeriodStartDate;
+    @CsvBindByName(column = "InvoicePeriod_EndDate")
+    private String invoicePeriodEndDate;
+    @CsvBindByName(column = "ContractDocumentReference_ID")
+    private String contractDocumentReferenceID;
+    @CsvBindByName(column = "AdditionalDocumentReference1_ID")
+    private String additionalDocumentReference1ID;
+    @CsvBindByName(column = "AdditionalDocumentReference1_DocumentTypeCode")
+    private String additionalDocumentReference1DocumentTypeCode;
+    @CsvBindByName(column = "AdditionalDocumentReference2_ID")
+    private String additionalDocumentReference2ID;
+    @CsvBindByName(column = "AdditionalDocumentReference2_DocumentDescription")
+    private String additionalDocumentReference2DocumentDescription;
+    @CsvBindByName(column = "AdditionalDocumentReference2_Attachment_URI")
+    private String additionalDocumentReference2AttachmentURI;
+    @CsvBindByName(column = "AccountingSupplierParty_EndpointID")
+    private String accountingSupplierPartyEndpointID;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyIdentification_ID")
+    private String accountingSupplierPartyPartyIdentificationID;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyName_Name")
+    private String accountingSupplierPartyPartyNameName;
+    @CsvBindByName(column = "AccountingSupplierParty_StreetName")
+    private String accountingSupplierPartyStreetName;
+    @CsvBindByName(column = "AccountingSupplierParty_AdditionalStreetName")
+    private String accountingSupplierPartyAdditionalStreetName;
+    @CsvBindByName(column = "AccountingSupplierParty_CityName")
+    private String accountingSupplierPartyCityName;
+    @CsvBindByName(column = "AccountingSupplierParty_PostalZone")
+    private String accountingSupplierPartyPostalZone;
+    @CsvBindByName(column = "AccountingSupplierParty_Country_IdentificationCode")
+    private String accountingSupplierPartyCountryIdentificationCode;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyTaxScheme_CompanyID")
+    private String accountingSupplierPartyPartyTaxSchemeCompanyID;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyTaxScheme_TaxScheme_ID")
+    private String accountingSupplierPartyPartyTaxSchemeTaxSchemeID;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyLegalEntity_RegistrationName")
+    private String accountingSupplierPartyPartyLegalEntityRegistrationName;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyLegalEntity_CompanyID")
+    private String accountingSupplierPartyPartyLegalEntityCompanyID;
+    @CsvBindByName(column = "AccountingSupplierParty_PartyLegalEntity_CompanyLegalForm")
+    private String accountingSupplierPartyPartyLegalEntityCompanyLegalForm;
+    @CsvBindByName(column = "AccountingCustomerParty_EndpointID")
+    private String accountingCustomerPartyEndpointID;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyIdentification_ID")
+    private String accountingCustomerPartyPartyIdentificationID;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyName_Name")
+    private String accountingCustomerPartyPartyNameName;
+    @CsvBindByName(column = "AccountingCustomerParty_StreetName")
+    private String accountingCustomerPartyStreetName;
+    @CsvBindByName(column = "AccountingCustomerParty_AdditionalStreetName")
+    private String accountingCustomerPartyAdditionalStreetName;
+    @CsvBindByName(column = "AccountingCustomerParty_CityName")
+    private String accountingCustomerPartyCityName;
+    @CsvBindByName(column = "AccountingCustomerParty_PostalZone")
+    private String accountingCustomerPartyPostalZone;
+    @CsvBindByName(column = "AccountingCustomerParty_CountrySubentity")
+    private String accountingCustomerPartyCountrySubentity;
+    @CsvBindByName(column = "AccountingCustomerParty_Country_IdentificationCode")
+    private String accountingCustomerPartyCountryIdentificationCode;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyTaxScheme_CompanyID")
+    private String accountingCustomerPartyPartyTaxSchemeCompanyID;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyTaxScheme_TaxScheme_ID")
+    private String accountingCustomerPartyPartyTaxSchemeTaxSchemeID;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyLegalEntity_RegistrationName")
+    private String accountingCustomerPartyPartyLegalEntityRegistrationName;
+    @CsvBindByName(column = "AccountingCustomerParty_PartyLegalEntity_CompanyID")
+    private String accountingCustomerPartyPartyLegalEntityCompanyID;
+    @CsvBindByName(column = "AccountingCustomerParty_Contact_Name")
+    private String accountingCustomerPartyContactName;
+    @CsvBindByName(column = "AccountingCustomerParty_Contact_Telephone")
+    private String accountingCustomerPartyContactTelephone;
+    @CsvBindByName(column = "AccountingCustomerParty_Contact_ElectronicMail")
+    private String accountingCustomerPartyContactElectronicMail;
+    @CsvBindByName(column = "Delivery_ActualDeliveryDate")
+    private String deliveryActualDeliveryDate;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_ID")
+    private String deliveryDeliveryLocationID;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_StreetName")
+    private String deliveryDeliveryLocationStreetName;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_AdditionalStreetName")
+    private String deliveryDeliveryLocationAdditionalStreetName;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_CityName")
+    private String deliveryDeliveryLocationCityName;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_PostalZone")
+    private String deliveryDeliveryLocationPostalZone;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_CountrySubentity")
+    private String deliveryDeliveryLocationCountrySubentity;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_AddressLine")
+    private String deliveryDeliveryLocationAddressLine;
+    @CsvBindByName(column = "Delivery_DeliveryLocation_Country_IdentificationCode")
+    private String deliveryDeliveryLocationCountryIdentificationCode;
+    @CsvBindByName(column = "Delivery_DeliveryParty_Name")
+    private String deliveryDeliveryPartyName;
+    @CsvBindByName(column = "PaymentMeans_PaymentMeansCode")
+    private String paymentMeansPaymentMeansCode;
+    @CsvBindByName(column = "PaymentMeans_PaymentID")
+    private String paymentMeansPaymentID;
+    @CsvBindByName(column = "PaymentMeans_PayeeFinancialAccount_ID")
+    private String paymentMeansPayeeFinancialAccountID;
+    @CsvBindByName(column = "PaymentMeans_PayeeFinancialAccount_Name")
+    private String paymentMeansPayeeFinancialAccountName;
+    @CsvBindByName(column = "PaymentMeans_PayeeFinancialAccount_BranchID")
+    private String paymentMeansPayeeFinancialAccountBranchID;
+    @CsvBindByName(column = "PaymentTerms_Note")
+    private String paymentTermsNote;
 }
