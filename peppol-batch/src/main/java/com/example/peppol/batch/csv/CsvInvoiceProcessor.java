@@ -2,6 +2,7 @@ package com.example.peppol.batch.csv;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,14 @@ import org.springframework.stereotype.Component;
 public class CsvInvoiceProcessor implements ItemProcessor<CsvInvoiceRecord, InvoiceType> {
 
     private final CsvInvoiceMapper mapper;
+
+    /**
+     * Default constructor using the MapStruct-generated mapper instance.
+     * Needed for tests that instantiate the processor directly.
+     */
+    public CsvInvoiceProcessor() {
+        this(Mappers.getMapper(CsvInvoiceMapper.class));
+    }
 
     @Override
     public InvoiceType process(CsvInvoiceRecord item) {
