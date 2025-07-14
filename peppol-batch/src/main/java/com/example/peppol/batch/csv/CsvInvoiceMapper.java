@@ -23,6 +23,11 @@ import network.oxalis.peppol.ubl2.jaxb.cbc.TaxCurrencyCodeType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.TaxPointDateType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.UBLVersionIDType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.UUIDType;
+import network.oxalis.peppol.ubl2.jaxb.cac.InvoiceLineType;
+import network.oxalis.peppol.ubl2.jaxb.cac.ItemPropertyType;
+import network.oxalis.peppol.ubl2.jaxb.cac.ItemType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.NameType;
+import network.oxalis.peppol.ubl2.jaxb.cbc.ValueType;
 import network.oxalis.peppol.ubl2.jaxb.ecdt.UBLExtensionsType;
 import org.mapstruct.factory.Mappers;
 
@@ -58,13 +63,13 @@ public interface CsvInvoiceMapper {
         if (val == null) {
             return;
         }
-        network.oxalis.peppol.ubl2.jaxb.cac.InvoiceLineType line = new network.oxalis.peppol.ubl2.jaxb.cac.InvoiceLineType();
-        network.oxalis.peppol.ubl2.jaxb.cac.ItemType itemType = new network.oxalis.peppol.ubl2.jaxb.cac.ItemType();
-        network.oxalis.peppol.ubl2.jaxb.cac.ItemPropertyType prop = new network.oxalis.peppol.ubl2.jaxb.cac.ItemPropertyType();
-        network.oxalis.peppol.ubl2.jaxb.cbc.NameType name = new network.oxalis.peppol.ubl2.jaxb.cbc.NameType();
+        InvoiceLineType line = new InvoiceLineType();
+        ItemType itemType = new ItemType();
+        ItemPropertyType prop = new ItemPropertyType();
+        NameType name = new NameType();
         name.setValue("chassis");
         prop.setName(name);
-        network.oxalis.peppol.ubl2.jaxb.cbc.ValueType value = new network.oxalis.peppol.ubl2.jaxb.cbc.ValueType();
+        ValueType value = new ValueType();
         value.setValue(val);
         prop.setValue(value);
         itemType.getAdditionalItemProperty().add(prop);
