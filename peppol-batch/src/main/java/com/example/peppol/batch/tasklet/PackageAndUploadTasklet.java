@@ -1,15 +1,15 @@
 package com.example.peppol.batch.tasklet;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.Comparator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Tasklet that zips the processed files and simulates uploading them.

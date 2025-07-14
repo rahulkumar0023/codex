@@ -1,10 +1,13 @@
 package com.example.peppol.batch;
 
-import java.nio.file.Path;
-import java.io.IOException;
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Value;
+import com.example.peppol.batch.csv.CsvInvoiceProcessor;
+import com.example.peppol.batch.csv.CsvInvoiceReader;
+import com.example.peppol.batch.csv.CsvInvoiceRecord;
+import com.example.peppol.batch.tasklet.CleanupTasklet;
+import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
+import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
+import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -13,23 +16,15 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.file.MultiResourceItemReader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
-import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
-import com.example.peppol.batch.tasklet.CleanupTasklet;
-import com.example.peppol.batch.XmlInvoiceReader;
-import com.example.peppol.batch.XmlCreditNoteReader;
-import com.example.peppol.batch.XmlInvoiceWriter;
-import com.example.peppol.batch.XmlCreditNoteWriter;
-import com.example.peppol.batch.csv.CsvInvoiceReader;
-import com.example.peppol.batch.csv.CsvInvoiceProcessor;
-import com.example.peppol.batch.csv.CsvInvoiceRecord;
-import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
-import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 @Configuration
 @EnableBatchProcessing

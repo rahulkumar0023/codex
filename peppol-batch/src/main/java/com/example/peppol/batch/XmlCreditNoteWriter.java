@@ -1,16 +1,14 @@
 package com.example.peppol.batch;
 
+import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import org.springframework.batch.item.Chunk;
+import org.springframework.batch.item.ItemWriter;
+
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.xml.namespace.QName;
-
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
-
-import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 
 /**
  * Utility to write {@link CreditNoteType} instances to XML and act as a

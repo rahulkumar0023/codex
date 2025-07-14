@@ -86,6 +86,7 @@ class XmlInvoiceWriterTest {
         InvoiceType invoice = processor.process(record);
 
         Path outputDir = Files.createTempDirectory("csv-invoice-writer");
+        log.info("Written csv invoice to {}", outputDir.toAbsolutePath());
         XmlInvoiceWriter writer = new XmlInvoiceWriter(outputDir);
         Chunk<InvoiceType> chunk = new Chunk<>();
         chunk.add(invoice);

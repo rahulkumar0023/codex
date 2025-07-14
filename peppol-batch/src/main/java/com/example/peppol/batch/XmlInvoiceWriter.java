@@ -1,14 +1,13 @@
 package com.example.peppol.batch;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.IOException;
-
-import javax.xml.namespace.QName;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
-import com.example.peppol.batch.UblDocumentWriter;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
+
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Utility to write {@link InvoiceType} instances to XML.

@@ -1,12 +1,12 @@
 package com.example.peppol.batch.csv;
 
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 /**
  * Simple DTO representing a CSV invoice row.

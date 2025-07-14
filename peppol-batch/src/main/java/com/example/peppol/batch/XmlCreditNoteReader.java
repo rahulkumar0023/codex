@@ -1,19 +1,17 @@
 package com.example.peppol.batch;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
 import org.springframework.core.io.Resource;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
-
-import network.oxalis.peppol.ubl2.jaxb.CreditNoteType;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Utility to parse UBL credit note XML into JAXB objects.
