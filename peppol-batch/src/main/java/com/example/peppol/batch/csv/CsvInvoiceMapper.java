@@ -29,15 +29,13 @@ import network.oxalis.peppol.ubl2.jaxb.cac.ItemType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.NameType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.ValueType;
 import network.oxalis.peppol.ubl2.jaxb.ecdt.UBLExtensionsType;
-import org.mapstruct.factory.Mappers;
 
 /**
  * MapStruct mapper converting {@link CsvInvoiceRecord} instances to
  * {@link InvoiceType}.
  */
-@Mapper(builder = @Builder(disableBuilder = true))
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface CsvInvoiceMapper {
-    CsvInvoiceMapper INSTANCE = Mappers.getMapper(CsvInvoiceMapper.class);
 
     @Mapping(target = "ID", expression = "java(toID(item.getId()))")
     @Mapping(target = "customizationID", expression = "java(toCustomizationID(item.getCustomizationId()))")

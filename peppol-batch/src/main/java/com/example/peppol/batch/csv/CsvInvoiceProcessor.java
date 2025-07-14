@@ -1,19 +1,21 @@
 package com.example.peppol.batch.csv;
 
-import org.springframework.batch.item.ItemProcessor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
-import com.example.peppol.batch.csv.CsvInvoiceMapper;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
 /**
  * Converts {@link CsvInvoiceRecord} instances into UBL {@link InvoiceType} objects
  * using MapStruct for field mapping.
  */
+@Component
 @Slf4j
+@RequiredArgsConstructor
 public class CsvInvoiceProcessor implements ItemProcessor<CsvInvoiceRecord, InvoiceType> {
 
-    private final CsvInvoiceMapper mapper = CsvInvoiceMapper.INSTANCE;
+    private final CsvInvoiceMapper mapper;
 
     @Override
     public InvoiceType process(CsvInvoiceRecord item) {
