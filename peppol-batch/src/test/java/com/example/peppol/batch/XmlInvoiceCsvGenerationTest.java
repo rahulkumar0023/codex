@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -18,6 +19,7 @@ import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 /**
  * Integration test converting an XML invoice into a CSV file.
  */
+@Slf4j
 class XmlInvoiceCsvGenerationTest {
 
     @Test
@@ -36,7 +38,7 @@ class XmlInvoiceCsvGenerationTest {
 
         Path written = outDir.resolve(invoice.getID().getValue() + ".csv");
         assertTrue(Files.exists(written));
-
+        log.info("File written to {}", written.toAbsolutePath());
         String csv = Files.readString(written);
         assertTrue(csv.contains("\"" + invoice.getID().getValue() + "\""));
     }
