@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import com.example.peppol.batch.dto.InvoiceDocument;
-import com.example.peppol.batch.mapper.InvoiceDocumentMapper;
+import com.example.peppol.batch.mapper.CsvToInvoiceMapper;
+import com.example.peppol.batch.mapper.InvoiceToCsvMapper;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 
 /**
- * Simple round-trip test for {@link InvoiceDocumentMapper}.
+ * Simple round-trip test for the invoice mappers.
  */
 class InvoiceDocumentMapperTest {
     @Test
@@ -33,15 +34,16 @@ class InvoiceDocumentMapperTest {
         doc.setBaseAmountCbcCurrencyId("EUR");
         doc.setAllowanceChargeCbcBaseAmount("100.00");
 
-        InvoiceDocumentMapper mapper = Mappers.getMapper(InvoiceDocumentMapper.class);
-        InvoiceType invoice = mapper.toInvoice(doc);
+        CsvToInvoiceMapper toMapper = Mappers.getMapper(CsvToInvoiceMapper.class);
+        InvoiceType invoice = toMapper.toInvoice(doc);
         assertNotNull(invoice);
         assertEquals("INV-001", invoice.getID().getValue());
         assertEquals("2024-07-15", invoice.getIssueDate().getValue().toString());
         assertEquals("Supplier City", invoice.getAccountingSupplierParty().getParty().getPostalAddress().getCityName().getValue());
         assertEquals("1", invoice.getInvoiceLine().get(0).getID().getValue());
 
-        InvoiceDocument roundtrip = mapper.fromInvoice(invoice);
+        InvoiceToCsvMapper fromMapper = Mappers.getMapper(InvoiceToCsvMapper.class);
+        InvoiceDocument roundtrip = fromMapper.fromInvoice(invoice);
         assertEquals(doc.getInvoiceNumber(), roundtrip.getInvoiceNumber());
         assertEquals(doc.getIssueDate(), roundtrip.getIssueDate());
         assertEquals(doc.getSupplierCityName(), roundtrip.getSupplierCityName());
