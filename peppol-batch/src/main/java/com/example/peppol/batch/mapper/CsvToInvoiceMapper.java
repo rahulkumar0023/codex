@@ -10,11 +10,11 @@ import org.mapstruct.Mappings;
  * Mapper converting a flat {@link InvoiceDocument} loaded from CSV into
  * the UBL {@link InvoiceType} representation.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface CsvToInvoiceMapper extends InvoiceMappingHelpers {
 
     @Mappings({
-        @Mapping(target = "iD.value", source = "invoiceNumber"),
+        @Mapping(target = "ID.value", source = "invoiceNumber"),
         @Mapping(target = "issueDate.value", source = "issueDate"),
         @Mapping(target = "dueDate.value", source = "dueDate"),
         @Mapping(target = "invoiceTypeCode.value", source = "invoiceTypeCode"),
