@@ -73,7 +73,7 @@ class XmlInvoiceWriterTest {
     @Test
     void readsFromCsvAndWritesXml() throws Exception {
         CsvInvoiceReader csvReader = new CsvInvoiceReader();
-        csvReader.setResource(new FileSystemResource(Path.of("src/test/resources/sample-invoice.csv")));
+        csvReader.setResource(new FileSystemResource(Path.of("src/test/resources/sample-invoice-document.csv")));
 
         StepExecution stepExecution = new StepExecution("csv", new JobExecution(1L));
         StepSynchronizationManager.register(stepExecution);

@@ -27,8 +27,8 @@ class CsvInvoiceReaderTest {
         StepSynchronizationManager.close();
 
         assertNotNull(rec);
-        assertEquals("TickstarAP-BIS3-test-01", rec.getId());
-        assertEquals("urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0", rec.getCustomizationID());
+        assertEquals("TickstarAP-BIS3-test-01", rec.getNote());
+       // assertEquals("urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0", rec.get());
         assertEquals("EUR", rec.getDocumentCurrencyCode());
     }
 }

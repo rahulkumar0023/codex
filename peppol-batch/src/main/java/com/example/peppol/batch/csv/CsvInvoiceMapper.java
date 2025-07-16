@@ -46,9 +46,9 @@ import network.oxalis.peppol.ubl2.jaxb.ecdt.UBLExtensionsType;
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface CsvInvoiceMapper {
 
-    @Mapping(target = "ID", expression = "java(toID(item.getId()))")
-    @Mapping(target = "customizationID", expression = "java(toCustomizationID(item.getCustomizationID()))")
-    @Mapping(target = "profileID", expression = "java(toProfileID(item.getProfileID()))")
+//    @Mapping(target = "ID", expression = "java(toID(item.getId()))")
+//    @Mapping(target = "customizationID", expression = "java(toCustomizationID(item.getCustomizationID()))")
+//    @Mapping(target = "profileID", expression = "java(toProfileID(item.getProfileID()))")
     @Mapping(target = "invoiceTypeCode", expression = "java(toInvoiceTypeCode(item.getInvoiceTypeCode()))")
     @Mapping(target = "issueDate", expression = "java(toIssueDate(item.getIssueDate()))")
     @Mapping(target = "dueDate", expression = "java(toDueDate(item.getDueDate()))")
@@ -67,9 +67,9 @@ public interface CsvInvoiceMapper {
     InvoiceType toInvoice(CsvInvoiceRecord item);
 
     @InheritInverseConfiguration(name = "toInvoice")
-    @Mapping(target = "id", expression = "java(fromID(invoice.getID()))")
-    @Mapping(target = "customizationID", expression = "java(fromCustomizationID(invoice.getCustomizationID()))")
-    @Mapping(target = "profileID", expression = "java(fromProfileID(invoice.getProfileID()))")
+//    @Mapping(target = "id", expression = "java(fromID(invoice.getID()))")
+//    @Mapping(target = "customizationID", expression = "java(fromCustomizationID(invoice.getCustomizationID()))")
+//    @Mapping(target = "profileID", expression = "java(fromProfileID(invoice.getProfileID()))")
     @Mapping(target = "invoiceTypeCode", expression = "java(fromInvoiceTypeCode(invoice.getInvoiceTypeCode()))")
     @Mapping(target = "issueDate", expression = "java(fromIssueDate(invoice.getIssueDate()))")
     @Mapping(target = "dueDate", expression = "java(fromDueDate(invoice.getDueDate()))")

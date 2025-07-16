@@ -61,8 +61,8 @@ public class CsvInvoiceWriter implements ItemWriter<CsvInvoiceRecord> {
         }
         int counter = 0;
         for (CsvInvoiceRecord rec : items) {
-            String base = (rec.getId() != null && !rec.getId().isBlank())
-                    ? rec.getId() : "invoice-" + (++counter);
+            String base = (rec.getNote() != null && !rec.getNote().isBlank())
+                    ? rec.getNote() : "invoice-" + (++counter);
             Path out = outputDir.resolve(base + ".csv");
             write(rec, out);
         }

@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CsvInvoiceRecord {
-    @CsvBindByName(column = "CustomizationID")
-    private String customizationID;
-    @CsvBindByName(column = "ProfileID")
-    private String profileID;
-    @CsvBindByName(column = "ID")
-    private String id;
+//    @CsvBindByName(column = "CustomizationID")
+//    private String customizationID;
+//    @CsvBindByName(column = "ProfileID")
+//    private String profileID;
+//    @CsvBindByName(column = "ID")
+//    private String id;
     @CsvBindByName(column = "IssueDate")
     private String issueDate;
     @CsvBindByName(column = "DueDate")

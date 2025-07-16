@@ -29,7 +29,7 @@ public class CsvInvoiceProcessor implements ItemProcessor<CsvInvoiceRecord, Invo
     @Override
     public InvoiceType process(CsvInvoiceRecord item) {
         InvoiceType invoice = mapper.toInvoice(item);
-        log.debug("Mapped CSV record {} to invoice {}", item.getId(), invoice.getID() != null ? invoice.getID().getValue() : null);
+        log.debug("Mapped CSV record {} to invoice {}", item.getNote(), invoice.getNote() != null ? invoice.getNote() : null);
         return invoice;
     }
 }
