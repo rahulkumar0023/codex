@@ -18,15 +18,15 @@ public interface CsvToInvoiceMapper extends InvoiceMappingHelpers {
         @Mapping(target = "issueDate.value", source = "issueDate"),
         @Mapping(target = "dueDate.value", source = "dueDate"),
         @Mapping(target = "invoiceTypeCode.value", source = "invoiceTypeCode"),
-        @Mapping(target = "note", source = "note"),
+        @Mapping(target = "note", expression = "java(toNoteList(doc.getNote()))"),
         @Mapping(target = "buyerReference.value", source = "buyerReference"),
         @Mapping(target = "invoicePeriod[0].startDate.value", source = "startDate"),
         @Mapping(target = "invoicePeriod[0].endDate.value", source = "endDate"),
-        @Mapping(target = "contractDocumentReference[0].iD.value", source = "contractDocumentReferenceCbcId"),
+        @Mapping(target = "contractDocumentReference[0].ID.value", source = "contractDocumentReferenceCbcId"),
 
         // Supplier party mapping
         @Mapping(target = "accountingSupplierParty.party.endpointID.value", source = "supplierEndPoint"),
-        @Mapping(target = "accountingSupplierParty.party.partyIdentification[0].iD.value", source = "supplierPartyIdentificationCbcId"),
+        @Mapping(target = "accountingSupplierParty.party.partyIdentification[0].ID.value", source = "supplierPartyIdentificationCbcId"),
         @Mapping(target = "accountingSupplierParty.party.partyName[0].name.value", source = "supplierPartyNameCbcName"),
         @Mapping(target = "accountingSupplierParty.party.postalAddress.streetName.value", source = "supplierStreetName"),
         @Mapping(target = "accountingSupplierParty.party.postalAddress.additionalStreetName.value", source = "supplierAdditionalStreetName"),
@@ -36,14 +36,14 @@ public interface CsvToInvoiceMapper extends InvoiceMappingHelpers {
         @Mapping(target = "accountingSupplierParty.party.postalAddress.addressLine[0].line.value", source = "supplierAddressLineCbcLine"),
         @Mapping(target = "accountingSupplierParty.party.postalAddress.country.identificationCode.value", source = "supplierCountryCbcIdentificationCode"),
         @Mapping(target = "accountingSupplierParty.party.partyTaxScheme[0].companyID.value", source = "supplierPartyTaxSchemeCompanyId"),
-        @Mapping(target = "accountingSupplierParty.party.partyTaxScheme[0].taxScheme.iD.value", source = "supplierPartyTaxSchemeTaxSchemeId"),
+        @Mapping(target = "accountingSupplierParty.party.partyTaxScheme[0].taxScheme.ID.value", source = "supplierPartyTaxSchemeTaxSchemeId"),
         @Mapping(target = "accountingSupplierParty.party.partyLegalEntity[0].registrationName.value", source = "supplierPartyLegalEntityRegistrationName"),
         @Mapping(target = "accountingSupplierParty.party.partyLegalEntity[0].companyID.value", source = "supplierPartyLegalEntityCompanyId"),
         @Mapping(target = "accountingSupplierParty.party.partyLegalEntity[0].companyLegalForm.value", source = "supplierPartyLegalEntityCompanyLegalForm"),
 
         // Customer party mapping
         @Mapping(target = "accountingCustomerParty.party.endpointID.value", source = "customerEndPoint"),
-        @Mapping(target = "accountingCustomerParty.party.partyIdentification[0].iD.value", source = "customerPartyIdentificationCbcId"),
+        @Mapping(target = "accountingCustomerParty.party.partyIdentification[0].ID.value", source = "customerPartyIdentificationCbcId"),
         @Mapping(target = "accountingCustomerParty.party.partyName[0].name.value", source = "customerPartyNameCbcName"),
         @Mapping(target = "accountingCustomerParty.party.postalAddress.streetName.value", source = "customerStreetName"),
         @Mapping(target = "accountingCustomerParty.party.postalAddress.additionalStreetName.value", source = "customerAdditionalStreetName"),
@@ -67,7 +67,7 @@ public interface CsvToInvoiceMapper extends InvoiceMappingHelpers {
         @Mapping(target = "legalMonetaryTotal.payableAmount.value", source = "legalMonetaryTotalCbcPayableAmount"),
 
         // Invoice line (flat example)
-        @Mapping(target = "invoiceLine[0].iD.value", source = "invoiceLineCbcId"),
+        @Mapping(target = "invoiceLine[0].ID.value", source = "invoiceLineCbcId"),
         @Mapping(target = "invoiceLine[0].invoicedQuantity.value", source = "invoiceLineCbcInvoicedQuantity"),
         @Mapping(target = "invoiceLine[0].lineExtensionAmount.value", source = "invoiceLineCbcLineExtensionAmount"),
         @Mapping(target = "invoiceLine[0].lineExtensionAmount.currencyID", source = "currencyId"),

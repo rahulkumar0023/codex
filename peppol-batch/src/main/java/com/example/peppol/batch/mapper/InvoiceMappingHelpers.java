@@ -24,6 +24,11 @@ public interface InvoiceMappingHelpers {
         return n == null ? null : n.getValue();
     }
 
+    default java.util.List<NoteType> toNoteList(String value) {
+        if (value == null) return null;
+        return java.util.Collections.singletonList(toNote(value));
+    }
+
     default IDType toID(String value) {
         if (value == null) return null;
         IDType t = new IDType();
