@@ -20,8 +20,8 @@ public interface InvoiceToCsvMapper extends InvoiceMappingHelpers {
         @Mapping(target = "invoiceTypeCode", source = "invoiceTypeCode.value"),
         @Mapping(target = "note", source = "note"),
         @Mapping(target = "buyerReference", source = "buyerReference.value"),
-        @Mapping(target = "startDate", source = "invoicePeriod.startDate.value"),
-        @Mapping(target = "endDate", source = "invoicePeriod.endDate.value"),
+        @Mapping(target = "startDate", source = "invoicePeriod[0].startDate.value"),
+        @Mapping(target = "endDate", source = "invoicePeriod[0].endDate.value"),
         @Mapping(target = "contractDocumentReferenceCbcId", source = "contractDocumentReference[0].ID.value"),
 
         // Supplier
