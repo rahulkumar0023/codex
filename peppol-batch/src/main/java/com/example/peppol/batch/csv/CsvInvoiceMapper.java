@@ -86,6 +86,7 @@ public interface CsvInvoiceMapper {
     @Mapping(target = "additionalDocumentReference2ID", expression = "java(fromAdditionalDocumentReference2ID(invoice.getAdditionalDocumentReference()))")
     @Mapping(target = "additionalDocumentReference2DocumentDescription", expression = "java(fromAdditionalDocumentReference2DocumentDescription(invoice.getAdditionalDocumentReference()))")
     @Mapping(target = "additionalDocumentReference2AttachmentURI", expression = "java(fromAdditionalDocumentReference2AttachmentURI(invoice.getAdditionalDocumentReference()))")
+    @Mapping(target = "paymentMeans", expression = "java(fromPaymentMeans(invoice.getPaymentMeans()))")
     @Mapping(target = "paymentMeansPaymentMeansCode", expression = "java(fromPaymentMeansCode(invoice.getPaymentMeans()))")
     @Mapping(target = "paymentMeansPaymentID", expression = "java(fromPaymentMeansPaymentID(invoice.getPaymentMeans()))")
     @Mapping(target = "paymentMeansPayeeFinancialAccountID", expression = "java(fromPaymentMeansPayeeFinancialAccountID(invoice.getPaymentMeans()))")
@@ -238,6 +239,17 @@ public interface CsvInvoiceMapper {
     }
 
     default java.util.List<PaymentMeansType> toPaymentMeans(CsvInvoiceRecord item) {
+        // Some CSV formats use a flat "paymentMeans" column representing the
+        // PaymentMeansCode. Prefer that if present, otherwise fall back to the
+        // individual PaymentMeans_* fields.
+        if (item.getPaymentMeans() != null && !item.getPaymentMeans().isBlank()) {
+            PaymentMeansType pm = new PaymentMeansType();
+            PaymentMeansCodeType code = new PaymentMeansCodeType();
+            code.setValue(item.getPaymentMeans());
+            pm.setPaymentMeansCode(code);
+            return new java.util.ArrayList<>(java.util.Collections.singletonList(pm));
+        }
+
         if (item.getPaymentMeansPaymentMeansCode() == null) return new java.util.ArrayList<>();
         PaymentMeansType pm = new PaymentMeansType();
         PaymentMeansCodeType code = new PaymentMeansCodeType();
@@ -441,6 +453,25 @@ public interface CsvInvoiceMapper {
         if (list == null || list.isEmpty()) return null;
         PaymentTermsType pt = list.get(0);
         return pt.getNote().isEmpty() ? null : pt.getNote().get(0).getValue();
+    }
+
+    /** Map a list of PaymentMeans to the first PaymentMeansCode value. */
+    default String fromPaymentMeans(java.util.List<PaymentMeansType> list) {
+        if (list == null || list.isEmpty()) return null;
+        PaymentMeansType pm = list.get(0);
+        return pm.getPaymentMeansCode() != null ? pm.getPaymentMeansCode().getValue() : null;
+    }
+
+    /** Create a PaymentMeans list from a single PaymentMeansCode string. */
+    default java.util.List<PaymentMeansType> toPaymentMeans(String codeValue) {
+        if (codeValue == null) return null;
+        PaymentMeansType pm = new PaymentMeansType();
+        PaymentMeansCodeType code = new PaymentMeansCodeType();
+        code.setValue(codeValue);
+        pm.setPaymentMeansCode(code);
+        java.util.List<PaymentMeansType> list = new java.util.ArrayList<>();
+        list.add(pm);
+        return list;
     }
 
 }
