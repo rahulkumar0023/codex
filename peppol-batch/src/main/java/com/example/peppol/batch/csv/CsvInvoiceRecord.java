@@ -133,6 +133,13 @@ public class CsvInvoiceRecord {
     private String deliveryDeliveryLocationCountryIdentificationCode;
     @CsvBindByName(column = "Delivery_DeliveryParty_Name")
     private String deliveryDeliveryPartyName;
+    /**
+     * Flat representation of the payment means code used by some CSV files.
+     * When present, this value maps to the first PaymentMeans element in the
+     * resulting UBL document.
+     */
+    @CsvBindByName(column = "paymentMeans")
+    private String paymentMeans;
     @CsvBindByName(column = "PaymentMeans_PaymentMeansCode")
     private String paymentMeansPaymentMeansCode;
     @CsvBindByName(column = "PaymentMeans_PaymentID")
