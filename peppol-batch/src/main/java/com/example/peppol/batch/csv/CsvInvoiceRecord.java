@@ -20,6 +20,9 @@ public class CsvInvoiceRecord {
 //    private String profileID;
 //    @CsvBindByName(column = "ID")
 //    private String id;
+
+    @CsvBindByName(column = "Invoice Number")
+    private String invoiceNumber;
     @CsvBindByName(column = "IssueDate")
     private String issueDate;
     @CsvBindByName(column = "DueDate")

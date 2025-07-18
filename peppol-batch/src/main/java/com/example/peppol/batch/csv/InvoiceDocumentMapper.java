@@ -14,7 +14,7 @@ public interface InvoiceDocumentMapper {
 
     // ====== TO UBL INVOICE ======
 
-    @Mapping(target = "ID", expression = "java(toID(doc.getInvoiceNumber()))")
+    @Mapping(target = "invoiceNumber", expression = "java(toID(doc.getInvoiceNumber()))")
     @Mapping(target = "issueDate", expression = "java(toIssueDate(doc.getIssueDate()))")
     @Mapping(target = "dueDate", expression = "java(toDueDate(doc.getDueDate()))")
     @Mapping(target = "invoiceTypeCode", expression = "java(toInvoiceTypeCode(doc.getInvoiceTypeCode()))")

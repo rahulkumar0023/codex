@@ -107,80 +107,10 @@ public interface CsvInvoiceMapper {
     @Mapping(target = "additionalDocumentReference2DocumentDescription", expression = "java(fromAdditionalDocumentReference2DocumentDescription(invoice.getAdditionalDocumentReference()))")
     @Mapping(target = "additionalDocumentReference2AttachmentURI", expression = "java(fromAdditionalDocumentReference2AttachmentURI(invoice.getAdditionalDocumentReference()))")
     @Mapping(target = "paymentMeans", expression = "java(fromPaymentMeans(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentMeansPaymentMeansCode", expression = "java(fromPaymentMeansCode(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentMeansPaymentID", expression = "java(fromPaymentMeansPaymentID(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentMeansPayeeFinancialAccountID", expression = "java(fromPaymentMeansPayeeFinancialAccountID(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentMeansPayeeFinancialAccountName", expression = "java(fromPaymentMeansPayeeFinancialAccountName(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentMeansPayeeFinancialAccountBranchID", expression = "java(fromPaymentMeansPayeeFinancialAccountBranchID(invoice.getPaymentMeans()))")
-    @Mapping(target = "paymentTermsNote", expression = "java(fromPaymentTerms(invoice.getPaymentTerms()))")
     @Mapping(target = "note", expression = "java(fromNote(invoice.getNote()))")
     CsvInvoiceRecord fromInvoice(InvoiceType invoice);
 
-    // -----------------------------------------------------------------
-    // Mapping for simplified InvoiceDocument representation
-    // -----------------------------------------------------------------
 
-    @Mappings({
-        @Mapping(target = "ID.value", source = "invoiceNumber"),
-        @Mapping(target = "issueDate.value", source = "issueDate"),
-        @Mapping(target = "dueDate.value", source = "dueDate"),
-        @Mapping(target = "invoiceTypeCode.value", source = "invoiceTypeCode"),
-        @Mapping(target = "note[0].value", source = "note"),
-        @Mapping(target = "buyerReference.value", source = "buyerReference"),
-        @Mapping(target = "invoicePeriod.startDate.value", source = "startDate"),
-        @Mapping(target = "invoicePeriod.endDate.value", source = "endDate"),
-        @Mapping(target = "contractDocumentReference[0].ID.value", source = "contractDocumentReferenceCbcId"),
-
-        // Supplier party mapping
-        @Mapping(target = "accountingSupplierParty.party.endpointID.value", source = "supplierEndPoint"),
-        @Mapping(target = "accountingSupplierParty.party.partyIdentification[0].ID.value", source = "supplierPartyIdentificationCbcId"),
-        @Mapping(target = "accountingSupplierParty.party.partyName[0].name.value", source = "supplierPartyNameCbcName"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.streetName.value", source = "supplierStreetName"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.additionalStreetName.value", source = "supplierAdditionalStreetName"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.cityName.value", source = "supplierCityName"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.postalZone.value", source = "supplierPostalZone"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.countrySubentity.value", source = "supplierCountrySubentity"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.addressLine[0].line.value", source = "supplierAddressLineCbcLine"),
-        @Mapping(target = "accountingSupplierParty.party.postalAddress.country.identificationCode.value", source = "supplierCountryCbcIdentificationCode"),
-
-        // Customer party mapping
-        @Mapping(target = "accountingCustomerParty.party.endpointID.value", source = "customerEndPoint"),
-        @Mapping(target = "accountingCustomerParty.party.partyIdentification[0].ID.value", source = "customerPartyIdentificationCbcId"),
-        @Mapping(target = "accountingCustomerParty.party.partyName[0].name.value", source = "customerPartyNameCbcName"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.streetName.value", source = "customerStreetName"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.additionalStreetName.value", source = "customerAdditionalStreetName"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.cityName.value", source = "customerCityName"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.postalZone.value", source = "customerPostalZone"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.countrySubentity.value", source = "customerCountrySubentity"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.addressLine[0].line.value", source = "customerAddressLineCbcLine"),
-        @Mapping(target = "accountingCustomerParty.party.postalAddress.country.identificationCode.value", source = "customerCountryCbcIdentificationCode"),
-        @Mapping(target = "accountingCustomerParty.party.partyLegalEntity[0].registrationName.value", source = "customerRegistrationName"),
-
-        // Monetary totals
-        @Mapping(target = "paymentMeans[0].paymentMeansCode.value", source = "paymentMeans"),
-        @Mapping(target = "paymentMeans[0].paymentID[0].value", source = "paymentMeansCbcPaymentId"),
-        @Mapping(target = "legalMonetaryTotal.lineExtensionAmount.value", source = "legalMonetaryTotalCbcLineExtensionAmount"),
-        @Mapping(target = "legalMonetaryTotal.taxExclusiveAmount.value", source = "legalMonetaryTotalCbcTaxExclusiveAmount"),
-        @Mapping(target = "legalMonetaryTotal.taxInclusiveAmount.value", source = "legalMonetaryTotalCbcTaxInclusiveAmount"),
-        @Mapping(target = "legalMonetaryTotal.payableAmount.value", source = "legalMonetaryTotalCbcPayableAmount"),
-
-        // Invoice line
-        @Mapping(target = "invoiceLine[0].ID.value", source = "invoiceLineCbcId"),
-        @Mapping(target = "invoiceLine[0].invoicedQuantity.value", source = "invoiceLineCbcInvoicedQuantity"),
-        @Mapping(target = "invoiceLine[0].lineExtensionAmount.value", source = "invoiceLineCbcLineExtensionAmount"),
-        @Mapping(target = "invoiceLine[0].lineExtensionAmount.currencyID", source = "currencyId"),
-        @Mapping(target = "invoiceLine[0].item.name.value", source = "itemCbcName"),
-        @Mapping(target = "invoiceLine[0].invoicePeriod.startDate.value", source = "invoicePeriodCbcStartDate"),
-        @Mapping(target = "invoiceLine[0].invoicePeriod.endDate.value", source = "invoicePeriodCbcEndDate"),
-        @Mapping(target = "invoiceLine[0].item.description[0].value", source = "descriptionCbcItem"),
-
-        // Allowance/charge
-        @Mapping(target = "allowanceCharge[0].chargeIndicator.value", source = "allowanceChargeCbcChargeIndicator"),
-        @Mapping(target = "allowanceCharge[0].amount.value", source = "allowanceChargeCbcAmount"),
-        @Mapping(target = "allowanceCharge[0].baseAmount.value", source = "allowanceChargeCbcBaseAmount"),
-        @Mapping(target = "allowanceCharge[0].baseAmount.currencyID", source = "baseAmountCbcCurrencyId"),
-        @Mapping(target = "allowanceCharge[0].allowanceChargeReason.value", source = "allowanceChargeReason")
-    })
     InvoiceType documentToInvoice(InvoiceDocument doc);
 
     @InheritInverseConfiguration(name = "documentToInvoice")
@@ -368,18 +298,6 @@ public interface CsvInvoiceMapper {
         return new java.util.ArrayList<>(java.util.Collections.singletonList(pm));
     }
 
-    default java.util.List<PaymentTermsType> toPaymentTerms(CsvInvoiceRecord item) {
-        if (item.getPaymentTermsNote() == null) return new java.util.ArrayList<>();
-        PaymentTermsType pt = new PaymentTermsType();
-        NoteType note = new NoteType();
-        note.setValue(item.getPaymentTermsNote());
-        pt.getNote().add(note);
-        return new java.util.ArrayList<>(java.util.Collections.singletonList(pt));
-    }
-
-
-
-
 
     default UBLExtensionsType emptyExtensions() {
         return new UBLExtensionsType();
@@ -501,49 +419,7 @@ public interface CsvInvoiceMapper {
                 : null;
     }
 
-    default String fromPaymentMeansCode(java.util.List<PaymentMeansType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentMeansType pm = list.get(0);
-        return pm.getPaymentMeansCode() != null ? pm.getPaymentMeansCode().getValue() : null;
-    }
 
-    default String fromPaymentMeansPaymentID(java.util.List<PaymentMeansType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentMeansType pm = list.get(0);
-        return pm.getPaymentID().isEmpty() ? null : pm.getPaymentID().get(0).getValue();
-    }
-
-    default String fromPaymentMeansPayeeFinancialAccountID(java.util.List<PaymentMeansType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentMeansType pm = list.get(0);
-        return pm.getPayeeFinancialAccount() != null && pm.getPayeeFinancialAccount().getID() != null
-                ? fromID(pm.getPayeeFinancialAccount().getID())
-                : null;
-    }
-
-    default String fromPaymentMeansPayeeFinancialAccountName(java.util.List<PaymentMeansType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentMeansType pm = list.get(0);
-        return pm.getPayeeFinancialAccount() != null && pm.getPayeeFinancialAccount().getName() != null
-                ? pm.getPayeeFinancialAccount().getName().getValue()
-                : null;
-    }
-
-    default String fromPaymentMeansPayeeFinancialAccountBranchID(java.util.List<PaymentMeansType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentMeansType pm = list.get(0);
-        return pm.getPayeeFinancialAccount() != null
-                && pm.getPayeeFinancialAccount().getFinancialInstitutionBranch() != null
-                && pm.getPayeeFinancialAccount().getFinancialInstitutionBranch().getID() != null
-                ? fromID(pm.getPayeeFinancialAccount().getFinancialInstitutionBranch().getID())
-                : null;
-    }
-
-    default String fromPaymentTerms(java.util.List<PaymentTermsType> list) {
-        if (list == null || list.isEmpty()) return null;
-        PaymentTermsType pt = list.get(0);
-        return pt.getNote().isEmpty() ? null : pt.getNote().get(0).getValue();
-    }
 
     /** Map a list of PaymentMeans to the first PaymentMeansCode value. */
     default String fromPaymentMeans(java.util.List<PaymentMeansType> list) {
