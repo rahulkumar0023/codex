@@ -1,8 +1,5 @@
 package com.example.peppol.batch;
 
-import com.example.peppol.batch.csv.CsvInvoiceProcessor;
-import com.example.peppol.batch.csv.CsvInvoiceReader;
-import com.example.peppol.batch.csv.CsvInvoiceRecord;
 import com.example.peppol.batch.tasklet.CleanupTasklet;
 import com.example.peppol.batch.tasklet.FetchDecryptUnzipTasklet;
 import com.example.peppol.batch.tasklet.PackageAndUploadTasklet;
@@ -52,26 +49,6 @@ public class BatchConfig {
                 .next(cleanupStep)
                 .build();
     }
-
-    /**
-     * Variant job that reads invoices from CSV files and writes them to XML.
-     */
-    @Bean
-    public Job csvProcessingJob(JobBuilderFactory jobs,
-                                Step fetchStep,
-                                Step csvInvoiceStep,
-                                Step packageAndUploadStep,
-                                Step cleanupStep) {
-        return jobs.get("csvProcessingJob")
-                .incrementer(new RunIdIncrementer())
-                .start(fetchStep)
-                .next(csvInvoiceStep)
-                .next(packageAndUploadStep)
-                .next(cleanupStep)
-                .build();
-    }
-
-
 
     // ---------------------------------------------------------------------
     // Extended job step definitions
@@ -126,27 +103,6 @@ public class BatchConfig {
                 .build();
     }
 
-    @Bean
-    public MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader() throws IOException {
-        MultiResourceItemReader<CsvInvoiceRecord> reader = new MultiResourceItemReader<>();
-        reader.setResources(new PathMatchingResourcePatternResolver()
-                .getResources("file:" + Path.of("tmp/unzipped/csv").toAbsolutePath() + "/*.csv"));
-        reader.setDelegate(new CsvInvoiceReader());
-        return reader;
-    }
-
-    @Bean
-    public Step csvInvoiceStep(StepBuilderFactory steps,
-                               MultiResourceItemReader<CsvInvoiceRecord> csvInvoiceReader,
-                               CsvInvoiceProcessor processor) {
-        XmlInvoiceWriter writer = new XmlInvoiceWriter(Path.of("tmp/processed/xml"));
-        return steps.get("csvInvoiceStep")
-                .<CsvInvoiceRecord, InvoiceType>chunk(5)
-                .reader(csvInvoiceReader)
-                .processor(processor)
-                .writer(writer)
-                .build();
-    }
 
     @Bean
     public Step packageAndUploadStep(StepBuilderFactory steps) {
