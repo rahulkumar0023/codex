@@ -5,6 +5,7 @@ package com.example.csvbatch;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.core.io.FileSystemResource;
@@ -26,12 +27,13 @@ public class CsvInvoiceEndToEndTest {
 
         MultiResourceItemReader<CsvInvoiceDto> reader = new MultiResourceItemReader<>();
         reader.setDelegate(delegate);
-        reader.setResources(new Resource[]{new FileSystemResource("src/test/resources/invoices.csv")});
-        reader.afterPropertiesSet();
+        reader.setResources(new Resource[]{new FileSystemResource("input/invoices.csv")});
+        //reader.afterPropertiesSet();
         reader.open(new ExecutionContext());
 
         // Setup mapper and writer
-        CsvInvoiceMapper mapper = new CsvInvoiceMapperImpl();
+
+        CsvInvoiceMapper mapper = Mappers.getMapper(CsvInvoiceMapper.class);
         Path outputDir = Path.of("target/test-invoice-xml");
         Files.createDirectories(outputDir);
         XmlInvoiceWriter writer = new XmlInvoiceWriter(outputDir);
