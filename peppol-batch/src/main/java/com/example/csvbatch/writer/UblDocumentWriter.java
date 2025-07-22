@@ -1,4 +1,5 @@
-package com.example.peppol.batch;
+package com.example.csvbatch.writer;
+
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -11,22 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * Generic helper for writing UBL documents to XML.
- */
 public final class UblDocumentWriter {
 
     private UblDocumentWriter() {
     }
 
-    /**
-     * Marshal the given document to a formatted XML string.
-     *
-     * @param document the UBL document instance
-     * @param type     JAXB class of the document
-     * @param qName    root QName to use
-     * @return XML representation
-     */
     public static <T> String writeToString(T document, Class<T> type, QName qName) {
         try {
             JAXBContext ctx = JAXBContext.newInstance(type);
@@ -61,9 +51,6 @@ public final class UblDocumentWriter {
         }
     }
 
-    /**
-     * Write the document to the given file path.
-     */
     public static <T> void write(T document, Class<T> type, QName qName, Path output) {
         try {
             Files.writeString(output, writeToString(document, type, qName));
@@ -72,3 +59,4 @@ public final class UblDocumentWriter {
         }
     }
 }
+

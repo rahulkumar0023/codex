@@ -1,9 +1,9 @@
 package com.example.csvbatch.config;
 
 import com.example.csvbatch.model.CsvInvoiceDto;
-import com.example.csvbatch.processor.InvoiceItemProcessor;
-import com.example.csvbatch.writer.PerInvoiceXmlWriter;
-import com.example.peppol.batch.util.CsvHeaderReader;
+import com.example.csvbatch.processor.InvoiceProcessor;
+import com.example.csvbatch.writer.XmlInvoiceWriter;
+import lombok.RequiredArgsConstructor;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -11,58 +11,37 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import jakarta.annotation.PostConstruct;
-import java.io.IOException;
+import java.nio.file.Path;
+
+import static com.example.csvbatch.CsvFields.INVOICE_CSV_HEADERS;
 
 @Configuration
 @EnableBatchProcessing
 public class BatchConfig {
 
-    private final CsvHeaderReader csvHeaderReader;
-    private final InvoiceItemProcessor processor;
-    private final PerInvoiceXmlWriter writer;
 
-    @Value("${batch.input.file:input/invoices.csv}")
-    private String inputFile;
-
-    @Value("${batch.chunk.size:5}")
-    private int chunkSize;
-
-    private String[] fieldNames;
-
-    public BatchConfig(CsvHeaderReader csvHeaderReader,
-                       InvoiceItemProcessor processor,
-                       PerInvoiceXmlWriter writer) {
-        this.csvHeaderReader = csvHeaderReader;
+    private final InvoiceProcessor processor;
+    public BatchConfig(InvoiceProcessor processor) {
         this.processor = processor;
-        this.writer = writer;
-    }
-
-    @PostConstruct
-    public void init() throws IOException {
-        this.fieldNames = csvHeaderReader.readHeaders(inputFile);
     }
 
     @Bean
     public FlatFileItemReader<CsvInvoiceDto> reader() {
         return new FlatFileItemReaderBuilder<CsvInvoiceDto>()
                 .name("csvInvoiceReader")
-                .resource(new FileSystemResource(inputFile))
+                .resource(new FileSystemResource("input/invoices.csv"))
                 .linesToSkip(1)
                 .delimited().delimiter(";")
-                .names(fieldNames)
+                .names(INVOICE_CSV_HEADERS)
+                //.names("invoiceNumber", "issueDate", "dueDate", "invoiceTypeCode", "note", "buyerReference", "startDate", "endDate", "contractDocumentReferenceCbcId", "supplierEndPoint", "supplierPartyIdentificationCbcId", "supplierPartyNameCbcName", "supplierStreetName", "supplierAdditionalStreetName", "supplierCityName", "supplierPostalZone", "supplierCountrySubentity", "supplierAddressLineCbcLine", "supplierCountryCbcIdentificationCode", "customerEndPoint", "customerPartyIdentificationCbcId", "customerPartyNameCbcName", "customerStreetName", "customerAdditionalStreetName", "customerCityName", "customerPostalZone", "customerCountrySubentity", "customerAddressLineCbcLine", "customerCountryCbcIdentificationCode", "customerRegistrationName", "paymentMeans", "paymentMeansCbcPaymentId", "legalMonetaryTotalCbcLineExtensionAmount", "legalMonetaryTotalCbcTaxExclusiveAmount", "legalMonetaryTotalCbcTaxInclusiveAmount", "legalMonetaryTotalCbcPayableAmount", "invoiceLineCbcId", "invoiceLineCbcInvoicedQuantity", "invoiceLineCbcLineExtensionAmount", "currencyId", "itemCbcName", "invoicePeriodCbcStartDate", "invoicePeriodCbcEndDate", "descriptionCbcItem", "allowanceChargeCbcChargeIndicator", "allowanceChargeCbcAmount", "allowanceChargeCbcBaseAmount", "baseAmountCbcCurrencyId", "allowanceChargeReason")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
                     setTargetType(CsvInvoiceDto.class);
                 }})
@@ -70,20 +49,24 @@ public class BatchConfig {
     }
 
     @Bean
-    public Step csvStep(JobRepository jobRepository, PlatformTransactionManager txManager,
-                        ItemReader<CsvInvoiceDto> reader) {
-        return new StepBuilder("csvStep", jobRepository)
-                .<CsvInvoiceDto, InvoiceType>chunk(chunkSize, txManager)
-                .reader(reader)
+    public XmlInvoiceWriter xmlInvoiceWriter() {
+        return new XmlInvoiceWriter(Path.of("output")); // or Path.of("target/xml-out")
+    }
+
+    @Bean
+    public Step csvToXmlStep(JobRepository repo, PlatformTransactionManager tx, XmlInvoiceWriter writer) {
+        return new StepBuilder("csvToXmlStep", repo)
+                .<CsvInvoiceDto, InvoiceType>chunk(10, tx)
+                .reader(reader())
                 .processor(processor)
                 .writer(writer)
                 .build();
     }
 
     @Bean
-    public Job invoiceJob(JobRepository jobRepository, Step csvStep) {
-        return new JobBuilder("invoiceJob", jobRepository)
-                .start(csvStep)
+    public Job invoiceJob(JobRepository repo, Step step) {
+        return new JobBuilder("invoiceJob", repo)
+                .start(step)
                 .build();
     }
 }

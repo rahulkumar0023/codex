@@ -1,3 +1,2 @@
-"invoiceNumber";"issueDate";"dueDate";"supplierName";"customerName";"currencyId";"lineExtensionAmount"
-"INV-1";"2024-01-01";"2024-01-15";"Supplier A";"Customer A";"EUR";"100.00"
-"INV-2";"2024-01-02";"2024-01-16";"Supplier A";"Customer B";"EUR";"200.00"
+"ublVersionID";"customizationID";"profileID";"invoiceNumber";"uuid";"issueDate";"dueDate";"invoiceTypeCode";"note";"documentCurrencyCode";"lineCountNumeric";"supplierCompanyId";"supplierName";"supplierStreet";"supplierCity";"supplierPostal";"supplierCountryCode";"supplierVatId";"supplierLegalId";"supplierTelephone";"customerCompanyId";"customerName";"customerStreet";"customerCity";"customerPostal";"customerCountryCode";"customerVatId";"customerLegalId"
+"2.1";"Yuki-UBL 1.0";"urn:www.cenbii.eu:profile:bii04:ver1.0";"INV-001";"70B0E8E4-BD1D-4AEB-979A-3A3674FCEE8A";"2025-07-18";"2025-08-02";"380";"Factuur voor Axora";"EUR";"1";"0693.882.075";"Beancounter";"Kalkstraat 12";"Leuven";"3000";"BE";"BE0693.882.075";"0693.882.075";"09 221 14 41";"1025.369.776";"Axora";"Avenue Louis Bertrand 102 21D";"Schaerbeek";"1030";"BE";"BE1025.369.776";"1025.369.776"

@@ -1,4 +1,4 @@
-package com.example.peppol.batch;
+package com.example.csvbatch.writer;
 
 import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
