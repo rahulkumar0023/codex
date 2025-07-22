@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.nio.file.Path;
 
-import static com.example.csvbatch.CsvFields.INVOICE_CSV_HEADERS;
+import static com.example.csvbatch.CsvFieldNames.INVOICE_FIELDS;
 
 @Configuration
 @EnableBatchProcessing
@@ -40,7 +40,7 @@ public class BatchConfig {
                 .resource(new FileSystemResource("input/invoices.csv"))
                 .linesToSkip(1)
                 .delimited().delimiter(";")
-                .names(INVOICE_CSV_HEADERS)
+                .names(INVOICE_FIELDS)
                 //.names("invoiceNumber", "issueDate", "dueDate", "invoiceTypeCode", "note", "buyerReference", "startDate", "endDate", "contractDocumentReferenceCbcId", "supplierEndPoint", "supplierPartyIdentificationCbcId", "supplierPartyNameCbcName", "supplierStreetName", "supplierAdditionalStreetName", "supplierCityName", "supplierPostalZone", "supplierCountrySubentity", "supplierAddressLineCbcLine", "supplierCountryCbcIdentificationCode", "customerEndPoint", "customerPartyIdentificationCbcId", "customerPartyNameCbcName", "customerStreetName", "customerAdditionalStreetName", "customerCityName", "customerPostalZone", "customerCountrySubentity", "customerAddressLineCbcLine", "customerCountryCbcIdentificationCode", "customerRegistrationName", "paymentMeans", "paymentMeansCbcPaymentId", "legalMonetaryTotalCbcLineExtensionAmount", "legalMonetaryTotalCbcTaxExclusiveAmount", "legalMonetaryTotalCbcTaxInclusiveAmount", "legalMonetaryTotalCbcPayableAmount", "invoiceLineCbcId", "invoiceLineCbcInvoicedQuantity", "invoiceLineCbcLineExtensionAmount", "currencyId", "itemCbcName", "invoicePeriodCbcStartDate", "invoicePeriodCbcEndDate", "descriptionCbcItem", "allowanceChargeCbcChargeIndicator", "allowanceChargeCbcAmount", "allowanceChargeCbcBaseAmount", "baseAmountCbcCurrencyId", "allowanceChargeReason")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
                     setTargetType(CsvInvoiceDto.class);

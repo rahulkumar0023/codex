@@ -31,83 +31,11 @@ public interface CsvInvoiceMapper {
     @Mapping(target = "lineCountNumeric", expression = "java(toLineCountNumeric(dto.getLineCountNumeric()))")
     @Mapping(target = "accountingSupplierParty", expression = "java(toAccountingSupplierParty(dto))")
     @Mapping(target = "accountingCustomerParty", expression = "java(toAccountingCustomerParty(dto))")
-//    @Mapping(target = "buyerReference",
-//            expression = "java(toBuyerReference(dto.getBuyerReference()))")
-//
-//    @Mapping(target = "invoicePeriod",
-//            expression = "java(toInvoicePeriodList(dto))")
-//    @Mapping(target = "contractDocumentReference",
-//            expression = "java(toContractDocumentReferenceList(dto.getContractDocumentReferenceCbcId()))")
-//
-//    // Supplier
-//    @Mapping(target = "accountingSupplierParty.party.endpointID",
-//            expression = "java(toEndpointID(dto.getSupplierEndPoint()))")
-//    @Mapping(target = "accountingSupplierParty.party.partyIdentification",
-//            expression = "java(toPartyIdentificationList(dto.getSupplierPartyIdentificationCbcId()))")
-//    @Mapping(target = "accountingSupplierParty.party.partyName",
-//            expression = "java(toPartyNameList(dto.getSupplierPartyNameCbcName()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.streetName",
-//            expression = "java(toStreetName(dto.getSupplierStreetName()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.additionalStreetName",
-//            expression = "java(toAdditionalStreetName(dto.getSupplierAdditionalStreetName()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.cityName",
-//            expression = "java(toCityName(dto.getSupplierCityName()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.postalZone",
-//            expression = "java(toPostalZone(dto.getSupplierPostalZone()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.countrySubentity",
-//            expression = "java(toCountrySubentity(dto.getSupplierCountrySubentity()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.addressLine",
-//            expression = "java(toAddressLineList(dto.getSupplierAddressLineCbcLine()))")
-//    @Mapping(target = "accountingSupplierParty.party.postalAddress.country.identificationCode",
-//            expression = "java(toIdentificationCode(dto.getSupplierCountryCbcIdentificationCode()))")
-//    @Mapping(target = "accountingSupplierParty.party.partyTaxScheme",
-//            expression = "java(toPartyTaxSchemeList(dto.getSupplierPartyIdentificationCbcId(), dto.getSupplierPartyIdentificationCbcId()))")
-//    @Mapping(target = "accountingSupplierParty.party.partyLegalEntity",
-//            expression = "java(toPartyLegalEntityList(dto.getSupplierPartyNameCbcName(), dto.getSupplierPartyIdentificationCbcId(), null))")
-//
-//    // Customer
-//    @Mapping(target = "accountingCustomerParty.party.endpointID",
-//            expression = "java(toEndpointID(dto.getCustomerEndPoint()))")
-//    @Mapping(target = "accountingCustomerParty.party.partyIdentification",
-//            expression = "java(toPartyIdentificationList(dto.getCustomerPartyIdentificationCbcId()))")
-//    @Mapping(target = "accountingCustomerParty.party.partyName",
-//            expression = "java(toPartyNameList(dto.getCustomerPartyNameCbcName()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.streetName",
-//            expression = "java(toStreetName(dto.getCustomerStreetName()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.additionalStreetName",
-//            expression = "java(toAdditionalStreetName(dto.getCustomerAdditionalStreetName()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.cityName",
-//            expression = "java(toCityName(dto.getCustomerCityName()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.postalZone",
-//            expression = "java(toPostalZone(dto.getCustomerPostalZone()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.countrySubentity",
-//            expression = "java(toCountrySubentity(dto.getCustomerCountrySubentity()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.addressLine",
-//            expression = "java(toAddressLineList(dto.getCustomerAddressLineCbcLine()))")
-//    @Mapping(target = "accountingCustomerParty.party.postalAddress.country.identificationCode",
-//            expression = "java(toIdentificationCode(dto.getCustomerCountryCbcIdentificationCode()))")
-//    @Mapping(target = "accountingCustomerParty.party.partyLegalEntity",
-//            expression = "java(toPartyLegalEntityList(dto.getCustomerRegistrationName(), dto.getCustomerPartyIdentificationCbcId(), null))")
-//    @Mapping(target = "accountingCustomerParty.party.contact",
-//            expression = "java(toContact(dto.getCustomerPartyNameCbcName(), dto.getCustomerPartyIdentificationCbcId(), null))")
-//
-//    // Payment
-//    @Mapping(target = "paymentMeans",
-//            expression = "java(toPaymentMeansList(dto.getPaymentMeans(), dto.getPaymentMeansCbcPaymentId()))")
-//
-//    // Monetary totals
-//    @Mapping(target = "legalMonetaryTotal",
-//            expression = "java(toLegalMonetaryTotal(dto.getLegalMonetaryTotalCbcLineExtensionAmount(), "
-//                    + "dto.getLegalMonetaryTotalCbcTaxExclusiveAmount(), "
-//                    + "dto.getLegalMonetaryTotalCbcTaxInclusiveAmount(), "
-//                    + "dto.getLegalMonetaryTotalCbcPayableAmount(), "
-//                    + "dto.getCurrencyId()))")
-//
-//    // Invoice line
-//    @Mapping(target = "invoiceLine", expression = "java(toInvoiceLineList(dto))")
-//
-//    // AllowanceCharge
-//    @Mapping(target = "allowanceCharge", expression = "java(toAllowanceChargeList(dto))")
+    @Mapping(target = "paymentMeans", expression = "java(toPaymentMeans(dto))")
+    @Mapping(target = "taxTotal", expression = "java(toTaxTotal(dto))")
+    @Mapping(target = "legalMonetaryTotal", expression = "java(toLegalMonetaryTotal(dto))")
+    @Mapping(target = "invoiceLine", expression = "java(toInvoiceLineList(dto))")
+
     InvoiceType toInvoiceType(CsvInvoiceDto dto);
 
     default UBLVersionIDType toUblVersionID(String value) {
@@ -166,6 +94,13 @@ public interface CsvInvoiceMapper {
         t.setListID("UNCL1001");
         t.setListAgencyID("6");
         return t;
+    }
+
+    default NoteType toNote(String value) {
+        if (value == null) return null;
+        NoteType note = new NoteType();
+        note.setValue(value);
+        return note;
     }
 
     default List<NoteType> toNoteList(String value) {
@@ -359,6 +294,217 @@ public interface CsvInvoiceMapper {
 
         customer.setParty(party);
         return customer;
+    }
+
+    default List<PaymentMeansType> toPaymentMeans(CsvInvoiceDto dto) {
+        PaymentMeansType pm = new PaymentMeansType();
+
+        PaymentMeansCodeType code = new PaymentMeansCodeType();
+        code.setValue(dto.getPaymentMeansCode());
+        code.setListID("UNCL4461");
+        code.setListAgencyID("6");
+        pm.setPaymentMeansCode(code);
+
+        PaymentDueDateType dueDate = new PaymentDueDateType();
+        try {
+            XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(dto.getPaymentDueDate());
+            dueDate.setValue(calendar);
+            pm.setPaymentDueDate(dueDate);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid payment due date", e);
+        }
+
+        PaymentIDType paymentId = new PaymentIDType();
+        paymentId.setValue(dto.getPaymentId());
+        pm.getPaymentID().add(paymentId);
+
+        FinancialAccountType account = new FinancialAccountType();
+        IDType accId = new IDType();
+        accId.setSchemeID("IBAN");
+        accId.setValue(dto.getPayeeAccountId());
+        account.setID(accId);
+
+        NameType name = new NameType();
+        name.setValue(dto.getPayeeAccountName());
+        account.setName(name);
+
+        pm.setPayeeFinancialAccount(account);
+
+        return Collections.singletonList(pm);
+    }
+
+    default List<TaxTotalType> toTaxTotal(CsvInvoiceDto dto) {
+        TaxTotalType taxTotal = new TaxTotalType();
+
+        TaxAmountType totalAmount = new TaxAmountType();
+        totalAmount.setCurrencyID("EUR");
+        totalAmount.setValue(new BigDecimal(dto.getTaxTotalAmount()));
+        taxTotal.setTaxAmount(totalAmount);
+
+        TaxSubtotalType subtotal = new TaxSubtotalType();
+
+        TaxableAmountType taxableAmount = new TaxableAmountType();
+        taxableAmount.setCurrencyID("EUR");
+        taxableAmount.setValue(new BigDecimal(dto.getTaxSubtotalTaxableAmount()));
+        subtotal.setTaxableAmount(taxableAmount);
+
+        TaxAmountType taxAmount = new TaxAmountType();
+        taxAmount.setCurrencyID("EUR");
+        taxAmount.setValue(new BigDecimal(dto.getTaxSubtotalTaxAmount()));
+        subtotal.setTaxAmount(taxAmount);
+
+        PercentType subtotalPercent = new PercentType();
+        subtotalPercent.setValue(new BigDecimal(dto.getTaxSubtotalPercent()));
+        subtotal.setPercent(subtotalPercent);
+
+        TaxCategoryType category = new TaxCategoryType();
+        IDType catId = new IDType();
+        catId.setSchemeAgencyID("6");
+        catId.setSchemeID("UNCL5305");
+        catId.setValue(dto.getTaxCategoryID());
+        category.setID(catId);
+
+        NameType name = new NameType();
+        name.setValue(dto.getTaxCategoryName());
+        category.setName(name);
+
+        PercentType catPercent = new PercentType();
+        catPercent.setValue(new BigDecimal(dto.getTaxCategoryPercent()));
+        category.setPercent(catPercent);
+
+        TaxSchemeType scheme = new TaxSchemeType();
+        IDType schemeId = new IDType();
+        schemeId.setSchemeAgencyID("6");
+        schemeId.setSchemeID("UN/ECE 5153");
+        schemeId.setValue(dto.getTaxSchemeID());
+        scheme.setID(schemeId);
+
+        category.setTaxScheme(scheme);
+        subtotal.setTaxCategory(category);
+
+        taxTotal.getTaxSubtotal().add(subtotal);
+        return Collections.singletonList(taxTotal);
+    }
+
+    default MonetaryTotalType toLegalMonetaryTotal(CsvInvoiceDto dto) {
+        MonetaryTotalType total = new MonetaryTotalType();
+
+        LineExtensionAmountType lineExt = new LineExtensionAmountType();
+        lineExt.setCurrencyID("EUR");
+        lineExt.setValue(new BigDecimal(dto.getLineExtensionAmount()));
+        total.setLineExtensionAmount(lineExt);
+
+        TaxExclusiveAmountType taxExcl = new TaxExclusiveAmountType();
+        taxExcl.setCurrencyID("EUR");
+        taxExcl.setValue(new BigDecimal(dto.getTaxExclusiveAmount()));
+        total.setTaxExclusiveAmount(taxExcl);
+
+        TaxInclusiveAmountType taxIncl = new TaxInclusiveAmountType();
+        taxIncl.setCurrencyID("EUR");
+        taxIncl.setValue(new BigDecimal(dto.getTaxInclusiveAmount()));
+        total.setTaxInclusiveAmount(taxIncl);
+
+        PayableAmountType payable = new PayableAmountType();
+        payable.setCurrencyID("EUR");
+        payable.setValue(new BigDecimal(dto.getPayableAmount()));
+        total.setPayableAmount(payable);
+
+        return total;
+    }
+
+
+    default List<InvoiceLineType> toInvoiceLineList(CsvInvoiceDto dto) {
+        InvoiceLineType line = new InvoiceLineType();
+
+        IDType id = new IDType();
+        id.setValue(dto.getInvoiceLineId());
+        line.setID(id);
+
+        UUIDType uuid = new UUIDType();
+        uuid.setValue(dto.getInvoiceLineUuid());
+        line.setUUID(uuid);
+
+        line.getNote().add(toNote(dto.getInvoiceLineNote1()));
+        line.getNote().add(toNote(dto.getInvoiceLineNote2()));
+
+        InvoicedQuantityType quantity = new InvoicedQuantityType();
+        quantity.setUnitCode(dto.getInvoiceLineUnitCode());
+        quantity.setValue(new BigDecimal(dto.getInvoiceLineQuantity()));
+        line.setInvoicedQuantity(quantity);
+
+        LineExtensionAmountType extAmount = new LineExtensionAmountType();
+        extAmount.setCurrencyID("EUR");
+        extAmount.setValue(new BigDecimal(dto.getInvoiceLineLineExtensionAmount()));
+        line.setLineExtensionAmount(extAmount);
+
+        TaxTotalType taxTotal = new TaxTotalType();
+        TaxAmountType taxAmount = new TaxAmountType();
+        taxAmount.setCurrencyID("EUR");
+        taxAmount.setValue(new BigDecimal(dto.getInvoiceLineTaxAmount()));
+        taxTotal.setTaxAmount(taxAmount);
+
+        TaxSubtotalType subtotal = new TaxSubtotalType();
+        TaxableAmountType taxable = new TaxableAmountType();
+        taxable.setCurrencyID("EUR");
+        taxable.setValue(new BigDecimal(dto.getInvoiceLineTaxableAmount()));
+        subtotal.setTaxableAmount(taxable);
+
+        TaxAmountType subTax = new TaxAmountType();
+        subTax.setCurrencyID("EUR");
+        subTax.setValue(new BigDecimal(dto.getInvoiceLineTaxAmount()));
+        subtotal.setTaxAmount(subTax);
+
+        PercentType percent = new PercentType();
+        percent.setValue(new BigDecimal(dto.getInvoiceLineTaxPercent()));
+        subtotal.setPercent(percent);
+
+        TaxCategoryType category = new TaxCategoryType();
+        IDType catId = new IDType();
+        catId.setSchemeAgencyID("6");
+        catId.setSchemeID("UNCL5305");
+        catId.setValue(dto.getInvoiceLineTaxCategoryId());
+        category.setID(catId);
+
+        NameType name = new NameType();
+        name.setValue(dto.getInvoiceLineTaxCategoryName());
+        category.setName(name);
+
+        PercentType catPercent = new PercentType();
+        catPercent.setValue(new BigDecimal(dto.getInvoiceLineTaxCategoryPercent()));
+        category.setPercent(catPercent);
+
+        TaxSchemeType scheme = new TaxSchemeType();
+        IDType schemeId = new IDType();
+        schemeId.setSchemeAgencyID("6");
+        schemeId.setSchemeID("UN/ECE 5153");
+        schemeId.setValue(dto.getInvoiceLineTaxSchemeId());
+        scheme.setID(schemeId);
+
+        category.setTaxScheme(scheme);
+        subtotal.setTaxCategory(category);
+        taxTotal.getTaxSubtotal().add(subtotal);
+        line.getTaxTotal().add(taxTotal);
+
+        ItemType item = new ItemType();
+        NameType itemName = new NameType();
+        itemName.setValue(dto.getInvoiceLineItemName());
+        item.setName(itemName);
+
+        ItemIdentificationType sellerItem = new ItemIdentificationType();
+        IDType itemId = new IDType();
+        itemId.setValue(dto.getInvoiceLineItemId());
+        sellerItem.setID(itemId);
+        item.setSellersItemIdentification(sellerItem);
+        line.setItem(item);
+
+        PriceType price = new PriceType();
+        PriceAmountType priceAmount = new PriceAmountType();
+        priceAmount.setCurrencyID("EUR");
+        priceAmount.setValue(new BigDecimal(dto.getInvoiceLinePriceAmount()));
+        price.setPriceAmount(priceAmount);
+        line.setPrice(price);
+
+        return Collections.singletonList(line);
     }
 
     default XMLGregorianCalendar toXmlDate(String dateStr) {
