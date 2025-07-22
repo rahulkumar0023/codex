@@ -27,15 +27,17 @@ public interface CsvInvoiceMapper {
     @Mapping(target = "dueDate", expression = "java(toDueDate(dto.getDueDate()))")
     @Mapping(target = "invoiceTypeCode", expression = "java(toInvoiceTypeCode(dto.getInvoiceTypeCode()))")
     @Mapping(target = "note", expression = "java(toNoteList(dto.getNote()))")
-    @Mapping(target = "documentCurrencyCode", expression = "java(toDocumentCurrencyCode(dto.getDocumentCurrencyCode()))")
-    @Mapping(target = "lineCountNumeric", expression = "java(toLineCountNumeric(dto.getLineCountNumeric()))")
+    @Mapping(target = "buyerReference", expression = "java(toBuyerReference(dto.getBuyerReference()))")
+//    @Mapping(target = "documentCurrencyCode", expression = "java(toDocumentCurrencyCode(dto.getDocumentCurrencyCode()))")
+//    @Mapping(target = "lineCountNumeric", expression = "java(toLineCountNumeric(dto.getLineCountNumeric()))")
     @Mapping(target = "accountingSupplierParty", expression = "java(toAccountingSupplierParty(dto))")
     @Mapping(target = "accountingCustomerParty", expression = "java(toAccountingCustomerParty(dto))")
     @Mapping(target = "paymentMeans", expression = "java(toPaymentMeans(dto))")
-    @Mapping(target = "taxTotal", expression = "java(toTaxTotal(dto))")
+    //@Mapping(target = "taxTotal", expression = "java(toTaxTotal(dto))")
     @Mapping(target = "legalMonetaryTotal", expression = "java(toLegalMonetaryTotal(dto))")
     @Mapping(target = "invoiceLine", expression = "java(toInvoiceLineList(dto))")
-
+    @Mapping(target = "invoicePeriod", expression = "java(toInvoicePeriodList(dto))")
+    @Mapping(target = "allowanceCharge", expression = "java(toAllowanceChargeList(dto))")
     InvoiceType toInvoiceType(CsvInvoiceDto dto);
 
     default UBLVersionIDType toUblVersionID(String value) {
@@ -110,21 +112,27 @@ public interface CsvInvoiceMapper {
         return Collections.singletonList(t);
     }
 
-
-    default DocumentCurrencyCodeType toDocumentCurrencyCode(String value) {
+    default BuyerReferenceType toBuyerReference(String value) {
         if (value == null) return null;
-        DocumentCurrencyCodeType t = new DocumentCurrencyCodeType();
-        t.setValue(value);
-        t.setListID("ISO4217");
-        return t;
+        BuyerReferenceType ref = new BuyerReferenceType();
+        ref.setValue(value);
+        return ref;
     }
 
-    default LineCountNumericType toLineCountNumeric(String value) {
-        if (value == null) return null;
-        LineCountNumericType t = new LineCountNumericType();
-        t.setValue(BigDecimal.valueOf(Long.parseLong(value)));
-        return t;
-    }
+//    default DocumentCurrencyCodeType toDocumentCurrencyCode(String value) {
+//        if (value == null) return null;
+//        DocumentCurrencyCodeType t = new DocumentCurrencyCodeType();
+//        t.setValue(value);
+//        t.setListID("ISO4217");
+//        return t;
+//    }
+//
+//    default LineCountNumericType toLineCountNumeric(String value) {
+//        if (value == null) return null;
+//        LineCountNumericType t = new LineCountNumericType();
+//        t.setValue(BigDecimal.valueOf(Long.parseLong(value)));
+//        return t;
+//    }
 
     default TelephoneType toTelephone(String value) {
         if (value == null) return null;
@@ -137,381 +145,355 @@ public interface CsvInvoiceMapper {
         SupplierPartyType supplier = new SupplierPartyType();
         PartyType party = new PartyType();
 
+        // EndpointID
+        if (dto.getSupplierEndPoint() != null) {
+            EndpointIDType endpointID = new EndpointIDType();
+            endpointID.setValue(dto.getSupplierEndPoint());
+            party.setEndpointID(endpointID);
+        }
+
         // PartyIdentification
-        PartyIdentificationType pid = new PartyIdentificationType();
-        IDType partyId = new IDType();
-        partyId.setValue(dto.getSupplierCompanyId());
-        partyId.setSchemeID("BE:EN");
-        pid.setID(partyId);
-        party.getPartyIdentification().add(pid);
+        if (dto.getSupplierPartyIdentificationCbcId() != null) {
+            PartyIdentificationType pid = new PartyIdentificationType();
+            IDType partyId = new IDType();
+            partyId.setValue(dto.getSupplierPartyIdentificationCbcId());
+            pid.setID(partyId);
+            party.getPartyIdentification().add(pid);
+        }
 
         // PartyName
-        PartyNameType pname = new PartyNameType();
-        NameType name = new NameType();
-        name.setValue(dto.getSupplierName());
-        pname.setName(name);
-        party.getPartyName().add(pname);
+        if (dto.getSupplierPartyNameCbcName() != null) {
+            PartyNameType pname = new PartyNameType();
+            NameType name = new NameType();
+            name.setValue(dto.getSupplierPartyNameCbcName());
+            pname.setName(name);
+            party.getPartyName().add(pname);
+        }
 
         // PostalAddress
         AddressType address = new AddressType();
-        StreetNameType street = new StreetNameType();
-        street.setValue(dto.getSupplierStreet());
-        address.setStreetName(street);
 
-        CityNameType city = new CityNameType();
-        city.setValue(dto.getSupplierCity());
-        address.setCityName(city);
+        if (dto.getSupplierStreetName() != null) {
+            StreetNameType street = new StreetNameType();
+            street.setValue(dto.getSupplierStreetName());
+            address.setStreetName(street);
+        }
 
-        PostalZoneType postal = new PostalZoneType();
-        postal.setValue(dto.getSupplierPostal());
-        address.setPostalZone(postal);
+        if (dto.getSupplierAdditionalStreetName() != null) {
+            AdditionalStreetNameType addStreet = new AdditionalStreetNameType();
+            addStreet.setValue(dto.getSupplierAdditionalStreetName());
+            address.setAdditionalStreetName(addStreet);
+        }
 
-        CountryType country = new CountryType();
-        IdentificationCodeType code = new IdentificationCodeType();
-        code.setValue(dto.getSupplierCountryCode());
-        code.setListID("ISO3166-1:Alpha2");
-        code.setListAgencyID("6");
-        country.setIdentificationCode(code);
-        address.setCountry(country);
+        if (dto.getSupplierCityName() != null) {
+            CityNameType city = new CityNameType();
+            city.setValue(dto.getSupplierCityName());
+            address.setCityName(city);
+        }
+
+        if (dto.getSupplierPostalZone() != null) {
+            PostalZoneType postal = new PostalZoneType();
+            postal.setValue(dto.getSupplierPostalZone());
+            address.setPostalZone(postal);
+        }
+
+        if (dto.getSupplierCountrySubentity() != null) {
+            CountrySubentityType subentity = new CountrySubentityType();
+            subentity.setValue(dto.getSupplierCountrySubentity());
+            address.setCountrySubentity(subentity);
+        }
+
+        if (dto.getSupplierAddressLineCbcLine() != null) {
+            AddressLineType line = new AddressLineType();
+            LineType l = new LineType();
+            l.setValue(dto.getSupplierAddressLineCbcLine());
+            line.setLine(l);
+            address.getAddressLine().add(line);
+        }
+
+        if (dto.getSupplierCountryCbcIdentificationCode() != null) {
+            CountryType country = new CountryType();
+            IdentificationCodeType code = new IdentificationCodeType();
+            code.setValue(dto.getSupplierCountryCbcIdentificationCode());
+            code.setListID("ISO3166-1:Alpha2");
+            code.setListAgencyID("6");
+            country.setIdentificationCode(code);
+            address.setCountry(country);
+        }
+
         party.setPostalAddress(address);
-
-        // PhysicalLocation
-        LocationType location = new LocationType();
-        AddressType locAddress = new AddressType();
-        locAddress.setStreetName(street);
-        locAddress.setCityName(city);
-        locAddress.setPostalZone(postal);
-        locAddress.setCountry(country);
-        location.setAddress(locAddress);
-        party.setPhysicalLocation(location);
-
-        // PartyTaxScheme
-        PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
-        CompanyIDType vat = new CompanyIDType();
-        vat.setValue(dto.getSupplierVatId());
-        vat.setSchemeID("BE:VAT");
-        taxScheme.setCompanyID(vat);
-        TaxSchemeType tax = new TaxSchemeType();
-        IDType taxId = new IDType();
-        taxId.setValue("VAT");
-        taxId.setSchemeID("UN/ECE 5153");
-        taxId.setSchemeAgencyID("6");
-        tax.setID(taxId);
-        taxScheme.setTaxScheme(tax);
-        party.getPartyTaxScheme().add(taxScheme);
-
-        // PartyLegalEntity
-        PartyLegalEntityType legal = new PartyLegalEntityType();
-        CompanyIDType legalId = new CompanyIDType();
-        legalId.setValue(dto.getSupplierLegalId());
-        legalId.setSchemeID("BE:EN");
-        legal.setCompanyID(legalId);
-        party.getPartyLegalEntity().add(legal);
-
-        // Contact
-        ContactType contact = new ContactType();
-        contact.setTelephone(toTelephone(dto.getSupplierTelephone()));
-        party.setContact(contact);
-
         supplier.setParty(party);
         return supplier;
     }
+
 
     default CustomerPartyType toAccountingCustomerParty(CsvInvoiceDto dto) {
         CustomerPartyType customer = new CustomerPartyType();
         PartyType party = new PartyType();
 
+        // EndpointID
+        if (dto.getCustomerEndPoint() != null) {
+            EndpointIDType endpointID = new EndpointIDType();
+            endpointID.setValue(dto.getCustomerEndPoint());
+            party.setEndpointID(endpointID);
+        }
+
         // PartyIdentification
-        PartyIdentificationType pid = new PartyIdentificationType();
-        IDType partyId = new IDType();
-        partyId.setValue(dto.getCustomerCompanyId());
-        partyId.setSchemeID("BE:EN");
-        pid.setID(partyId);
-        party.getPartyIdentification().add(pid);
+        if (dto.getCustomerPartyIdentificationCbcId() != null) {
+            PartyIdentificationType pid = new PartyIdentificationType();
+            IDType partyId = new IDType();
+            partyId.setValue(dto.getCustomerPartyIdentificationCbcId());
+            pid.setID(partyId);
+            party.getPartyIdentification().add(pid);
+        }
 
         // PartyName
-        PartyNameType pname = new PartyNameType();
-        NameType name = new NameType();
-        name.setValue(dto.getCustomerName());
-        pname.setName(name);
-        party.getPartyName().add(pname);
+        if (dto.getCustomerPartyNameCbcName() != null) {
+            PartyNameType pname = new PartyNameType();
+            NameType name = new NameType();
+            name.setValue(dto.getCustomerPartyNameCbcName());
+            pname.setName(name);
+            party.getPartyName().add(pname);
+        }
 
         // PostalAddress
         AddressType address = new AddressType();
-        StreetNameType street = new StreetNameType();
-        street.setValue(dto.getCustomerStreet());
-        address.setStreetName(street);
 
-        CityNameType city = new CityNameType();
-        city.setValue(dto.getCustomerCity());
-        address.setCityName(city);
+        if (dto.getCustomerStreetName() != null) {
+            StreetNameType street = new StreetNameType();
+            street.setValue(dto.getCustomerStreetName());
+            address.setStreetName(street);
+        }
 
-        PostalZoneType postal = new PostalZoneType();
-        postal.setValue(dto.getCustomerPostal());
-        address.setPostalZone(postal);
+        if (dto.getCustomerAdditionalStreetName() != null) {
+            AdditionalStreetNameType addStreet = new AdditionalStreetNameType();
+            addStreet.setValue(dto.getCustomerAdditionalStreetName());
+            address.setAdditionalStreetName(addStreet);
+        }
 
-        CountryType country = new CountryType();
-        IdentificationCodeType code = new IdentificationCodeType();
-        code.setValue(dto.getCustomerCountryCode());
-        code.setListID("ISO3166-1:Alpha2");
-        code.setListAgencyID("6");
-        country.setIdentificationCode(code);
-        address.setCountry(country);
+        if (dto.getCustomerCityName() != null) {
+            CityNameType city = new CityNameType();
+            city.setValue(dto.getCustomerCityName());
+            address.setCityName(city);
+        }
+
+        if (dto.getCustomerPostalZone() != null) {
+            PostalZoneType postal = new PostalZoneType();
+            postal.setValue(dto.getCustomerPostalZone());
+            address.setPostalZone(postal);
+        }
+
+        if (dto.getCustomerCountrySubentity() != null) {
+            CountrySubentityType subentity = new CountrySubentityType();
+            subentity.setValue(dto.getCustomerCountrySubentity());
+            address.setCountrySubentity(subentity);
+        }
+
+        if (dto.getCustomerAddressLineCbcLine() != null) {
+            AddressLineType line = new AddressLineType();
+            LineType l = new LineType();
+            l.setValue(dto.getCustomerAddressLineCbcLine());
+            line.setLine(l);
+            address.getAddressLine().add(line);
+        }
+
+        if (dto.getCustomerCountryCbcIdentificationCode() != null) {
+            CountryType country = new CountryType();
+            IdentificationCodeType code = new IdentificationCodeType();
+            code.setValue(dto.getCustomerCountryCbcIdentificationCode());
+            code.setListID("ISO3166-1:Alpha2");
+            code.setListAgencyID("6");
+            country.setIdentificationCode(code);
+            address.setCountry(country);
+        }
+
         party.setPostalAddress(address);
 
-        // PhysicalLocation
-        LocationType location = new LocationType();
-        AddressType locAddress = new AddressType();
-        locAddress.setStreetName(street);
-        locAddress.setCityName(city);
-        locAddress.setPostalZone(postal);
-        locAddress.setCountry(country);
-        location.setAddress(locAddress);
-        party.setPhysicalLocation(location);
-
-        // PartyTaxScheme
-        PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
-        CompanyIDType vat = new CompanyIDType();
-        vat.setValue(dto.getCustomerVatId());
-        vat.setSchemeID("BE:VAT");
-        taxScheme.setCompanyID(vat);
-        TaxSchemeType tax = new TaxSchemeType();
-        IDType taxId = new IDType();
-        taxId.setValue("VAT");
-        taxId.setSchemeID("UN/ECE 5153");
-        taxId.setSchemeAgencyID("6");
-        tax.setID(taxId);
-        taxScheme.setTaxScheme(tax);
-        party.getPartyTaxScheme().add(taxScheme);
-
         // PartyLegalEntity
-        PartyLegalEntityType legal = new PartyLegalEntityType();
-        CompanyIDType legalId = new CompanyIDType();
-        legalId.setValue(dto.getCustomerLegalId());
-        legalId.setSchemeID("BE:EN");
-        legal.setCompanyID(legalId);
-        party.getPartyLegalEntity().add(legal);
+        if (dto.getCustomerRegistrationName() != null) {
+            PartyLegalEntityType legal = new PartyLegalEntityType();
+            RegistrationNameType reg = new RegistrationNameType();
+            reg.setValue(dto.getCustomerRegistrationName());
+            legal.setRegistrationName(reg);
+            party.getPartyLegalEntity().add(legal);
+        }
 
         customer.setParty(party);
         return customer;
     }
 
+
     default List<PaymentMeansType> toPaymentMeans(CsvInvoiceDto dto) {
-        PaymentMeansType pm = new PaymentMeansType();
-
-        PaymentMeansCodeType code = new PaymentMeansCodeType();
-        code.setValue(dto.getPaymentMeansCode());
-        code.setListID("UNCL4461");
-        code.setListAgencyID("6");
-        pm.setPaymentMeansCode(code);
-
-        PaymentDueDateType dueDate = new PaymentDueDateType();
-        try {
-            XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(dto.getPaymentDueDate());
-            dueDate.setValue(calendar);
-            pm.setPaymentDueDate(dueDate);
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid payment due date", e);
+        if (dto.getPaymentMeansCode() == null && dto.getPaymentMeansCbcPaymentId() == null) {
+            return Collections.emptyList();
         }
 
-        PaymentIDType paymentId = new PaymentIDType();
-        paymentId.setValue(dto.getPaymentId());
-        pm.getPaymentID().add(paymentId);
+        PaymentMeansType pm = new PaymentMeansType();
 
-        FinancialAccountType account = new FinancialAccountType();
-        IDType accId = new IDType();
-        accId.setSchemeID("IBAN");
-        accId.setValue(dto.getPayeeAccountId());
-        account.setID(accId);
+        // PaymentMeansCode
+        if (dto.getPaymentMeansCode() != null) {
+            PaymentMeansCodeType code = new PaymentMeansCodeType();
+            code.setValue(dto.getPaymentMeansCode());
+            code.setListID("UNCL4461");
+            code.setListAgencyID("6");
+            pm.setPaymentMeansCode(code);
+        }
 
-        NameType name = new NameType();
-        name.setValue(dto.getPayeeAccountName());
-        account.setName(name);
-
-        pm.setPayeeFinancialAccount(account);
+        // PaymentID
+        if (dto.getPaymentMeansCbcPaymentId() != null) {
+            PaymentIDType pid = new PaymentIDType();
+            pid.setValue(dto.getPaymentMeansCbcPaymentId());
+            pm.getPaymentID().add(pid);
+        }
 
         return Collections.singletonList(pm);
     }
 
-    default List<TaxTotalType> toTaxTotal(CsvInvoiceDto dto) {
-        TaxTotalType taxTotal = new TaxTotalType();
 
-        TaxAmountType totalAmount = new TaxAmountType();
-        totalAmount.setCurrencyID("EUR");
-        totalAmount.setValue(new BigDecimal(dto.getTaxTotalAmount()));
-        taxTotal.setTaxAmount(totalAmount);
-
-        TaxSubtotalType subtotal = new TaxSubtotalType();
-
-        TaxableAmountType taxableAmount = new TaxableAmountType();
-        taxableAmount.setCurrencyID("EUR");
-        taxableAmount.setValue(new BigDecimal(dto.getTaxSubtotalTaxableAmount()));
-        subtotal.setTaxableAmount(taxableAmount);
-
-        TaxAmountType taxAmount = new TaxAmountType();
-        taxAmount.setCurrencyID("EUR");
-        taxAmount.setValue(new BigDecimal(dto.getTaxSubtotalTaxAmount()));
-        subtotal.setTaxAmount(taxAmount);
-
-        PercentType subtotalPercent = new PercentType();
-        subtotalPercent.setValue(new BigDecimal(dto.getTaxSubtotalPercent()));
-        subtotal.setPercent(subtotalPercent);
-
-        TaxCategoryType category = new TaxCategoryType();
-        IDType catId = new IDType();
-        catId.setSchemeAgencyID("6");
-        catId.setSchemeID("UNCL5305");
-        catId.setValue(dto.getTaxCategoryID());
-        category.setID(catId);
-
-        NameType name = new NameType();
-        name.setValue(dto.getTaxCategoryName());
-        category.setName(name);
-
-        PercentType catPercent = new PercentType();
-        catPercent.setValue(new BigDecimal(dto.getTaxCategoryPercent()));
-        category.setPercent(catPercent);
-
-        TaxSchemeType scheme = new TaxSchemeType();
-        IDType schemeId = new IDType();
-        schemeId.setSchemeAgencyID("6");
-        schemeId.setSchemeID("UN/ECE 5153");
-        schemeId.setValue(dto.getTaxSchemeID());
-        scheme.setID(schemeId);
-
-        category.setTaxScheme(scheme);
-        subtotal.setTaxCategory(category);
-
-        taxTotal.getTaxSubtotal().add(subtotal);
-        return Collections.singletonList(taxTotal);
-    }
 
     default MonetaryTotalType toLegalMonetaryTotal(CsvInvoiceDto dto) {
         MonetaryTotalType total = new MonetaryTotalType();
 
-        LineExtensionAmountType lineExt = new LineExtensionAmountType();
-        lineExt.setCurrencyID("EUR");
-        lineExt.setValue(new BigDecimal(dto.getLineExtensionAmount()));
-        total.setLineExtensionAmount(lineExt);
+        if (dto.getLegalMonetaryTotalCbcLineExtensionAmount() != null) {
+            LineExtensionAmountType lineAmt = new LineExtensionAmountType();
+            lineAmt.setValue(new BigDecimal(dto.getLegalMonetaryTotalCbcLineExtensionAmount()));
+            lineAmt.setCurrencyID("EUR");
+            total.setLineExtensionAmount(lineAmt);
+        }
 
-        TaxExclusiveAmountType taxExcl = new TaxExclusiveAmountType();
-        taxExcl.setCurrencyID("EUR");
-        taxExcl.setValue(new BigDecimal(dto.getTaxExclusiveAmount()));
-        total.setTaxExclusiveAmount(taxExcl);
+        if (dto.getLegalMonetaryTotalCbcTaxExclusiveAmount() != null) {
+            TaxExclusiveAmountType taxExclAmt = new TaxExclusiveAmountType();
+            taxExclAmt.setValue(new BigDecimal(dto.getLegalMonetaryTotalCbcTaxExclusiveAmount()));
+            taxExclAmt.setCurrencyID("EUR");
+            total.setTaxExclusiveAmount(taxExclAmt);
+        }
 
-        TaxInclusiveAmountType taxIncl = new TaxInclusiveAmountType();
-        taxIncl.setCurrencyID("EUR");
-        taxIncl.setValue(new BigDecimal(dto.getTaxInclusiveAmount()));
-        total.setTaxInclusiveAmount(taxIncl);
+        if (dto.getLegalMonetaryTotalCbcTaxInclusiveAmount() != null) {
+            TaxInclusiveAmountType taxInclAmt = new TaxInclusiveAmountType();
+            taxInclAmt.setValue(new BigDecimal(dto.getLegalMonetaryTotalCbcTaxInclusiveAmount()));
+            taxInclAmt.setCurrencyID("EUR");
+            total.setTaxInclusiveAmount(taxInclAmt);
+        }
 
-        PayableAmountType payable = new PayableAmountType();
-        payable.setCurrencyID("EUR");
-        payable.setValue(new BigDecimal(dto.getPayableAmount()));
-        total.setPayableAmount(payable);
+        if (dto.getLegalMonetaryTotalCbcPayableAmount() != null) {
+            PayableAmountType payableAmt = new PayableAmountType();
+            payableAmt.setValue(new BigDecimal(dto.getLegalMonetaryTotalCbcPayableAmount()));
+            payableAmt.setCurrencyID("EUR");
+            total.setPayableAmount(payableAmt);
+        }
 
         return total;
     }
 
-
     default List<InvoiceLineType> toInvoiceLineList(CsvInvoiceDto dto) {
+        if (dto.getInvoiceLineCbcId() == null) {
+            return Collections.emptyList();
+        }
+
         InvoiceLineType line = new InvoiceLineType();
 
+        // ID
         IDType id = new IDType();
-        id.setValue(dto.getInvoiceLineId());
+        id.setValue(dto.getInvoiceLineCbcId());
         line.setID(id);
 
-        UUIDType uuid = new UUIDType();
-        uuid.setValue(dto.getInvoiceLineUuid());
-        line.setUUID(uuid);
+        // Invoiced Quantity
+        if (dto.getInvoiceLineCbcInvoicedQuantity() != null) {
+            InvoicedQuantityType qty = new InvoicedQuantityType();
+            qty.setValue(new BigDecimal(dto.getInvoiceLineCbcInvoicedQuantity()));
+            qty.setUnitCode("ZZ");
+            line.setInvoicedQuantity(qty);
+        }
 
-        line.getNote().add(toNote(dto.getInvoiceLineNote1()));
-        line.getNote().add(toNote(dto.getInvoiceLineNote2()));
+        // Line Extension Amount
+        if (dto.getInvoiceLineCbcLineExtensionAmount() != null) {
+            LineExtensionAmountType amt = new LineExtensionAmountType();
+            amt.setValue(new BigDecimal(dto.getInvoiceLineCbcLineExtensionAmount()));
+            amt.setCurrencyID(dto.getCurrencyId() != null ? dto.getCurrencyId() : "EUR");
+            line.setLineExtensionAmount(amt);
+        }
 
-        InvoicedQuantityType quantity = new InvoicedQuantityType();
-        quantity.setUnitCode(dto.getInvoiceLineUnitCode());
-        quantity.setValue(new BigDecimal(dto.getInvoiceLineQuantity()));
-        line.setInvoicedQuantity(quantity);
-
-        LineExtensionAmountType extAmount = new LineExtensionAmountType();
-        extAmount.setCurrencyID("EUR");
-        extAmount.setValue(new BigDecimal(dto.getInvoiceLineLineExtensionAmount()));
-        line.setLineExtensionAmount(extAmount);
-
-        TaxTotalType taxTotal = new TaxTotalType();
-        TaxAmountType taxAmount = new TaxAmountType();
-        taxAmount.setCurrencyID("EUR");
-        taxAmount.setValue(new BigDecimal(dto.getInvoiceLineTaxAmount()));
-        taxTotal.setTaxAmount(taxAmount);
-
-        TaxSubtotalType subtotal = new TaxSubtotalType();
-        TaxableAmountType taxable = new TaxableAmountType();
-        taxable.setCurrencyID("EUR");
-        taxable.setValue(new BigDecimal(dto.getInvoiceLineTaxableAmount()));
-        subtotal.setTaxableAmount(taxable);
-
-        TaxAmountType subTax = new TaxAmountType();
-        subTax.setCurrencyID("EUR");
-        subTax.setValue(new BigDecimal(dto.getInvoiceLineTaxAmount()));
-        subtotal.setTaxAmount(subTax);
-
-        PercentType percent = new PercentType();
-        percent.setValue(new BigDecimal(dto.getInvoiceLineTaxPercent()));
-        subtotal.setPercent(percent);
-
-        TaxCategoryType category = new TaxCategoryType();
-        IDType catId = new IDType();
-        catId.setSchemeAgencyID("6");
-        catId.setSchemeID("UNCL5305");
-        catId.setValue(dto.getInvoiceLineTaxCategoryId());
-        category.setID(catId);
-
-        NameType name = new NameType();
-        name.setValue(dto.getInvoiceLineTaxCategoryName());
-        category.setName(name);
-
-        PercentType catPercent = new PercentType();
-        catPercent.setValue(new BigDecimal(dto.getInvoiceLineTaxCategoryPercent()));
-        category.setPercent(catPercent);
-
-        TaxSchemeType scheme = new TaxSchemeType();
-        IDType schemeId = new IDType();
-        schemeId.setSchemeAgencyID("6");
-        schemeId.setSchemeID("UN/ECE 5153");
-        schemeId.setValue(dto.getInvoiceLineTaxSchemeId());
-        scheme.setID(schemeId);
-
-        category.setTaxScheme(scheme);
-        subtotal.setTaxCategory(category);
-        taxTotal.getTaxSubtotal().add(subtotal);
-        line.getTaxTotal().add(taxTotal);
-
+        // Item
         ItemType item = new ItemType();
-        NameType itemName = new NameType();
-        itemName.setValue(dto.getInvoiceLineItemName());
-        item.setName(itemName);
-
-        ItemIdentificationType sellerItem = new ItemIdentificationType();
-        IDType itemId = new IDType();
-        itemId.setValue(dto.getInvoiceLineItemId());
-        sellerItem.setID(itemId);
-        item.setSellersItemIdentification(sellerItem);
+        if (dto.getItemCbcName() != null) {
+            NameType name = new NameType();
+            name.setValue(dto.getItemCbcName());
+            item.setName(name);
+        }
+        if (dto.getDescriptionCbcItem() != null) {
+            DescriptionType desc = new DescriptionType();
+            desc.setValue(dto.getDescriptionCbcItem());
+            item.getDescription().add(desc);
+        }
         line.setItem(item);
-
-        PriceType price = new PriceType();
-        PriceAmountType priceAmount = new PriceAmountType();
-        priceAmount.setCurrencyID("EUR");
-        priceAmount.setValue(new BigDecimal(dto.getInvoiceLinePriceAmount()));
-        price.setPriceAmount(priceAmount);
-        line.setPrice(price);
-
         return Collections.singletonList(line);
     }
 
-    default XMLGregorianCalendar toXmlDate(String dateStr) {
+    default List<AllowanceChargeType> toAllowanceChargeList(CsvInvoiceDto dto) {
+        if (dto.getAllowanceChargeCbcChargeIndicator() == null) return Collections.emptyList();
+
+        AllowanceChargeType charge = new AllowanceChargeType();
+
+        // ChargeIndicator
+        ChargeIndicatorType chargeIndicator = new ChargeIndicatorType();
+        chargeIndicator.setValue(Boolean.parseBoolean(dto.getAllowanceChargeCbcChargeIndicator()));
+        charge.setChargeIndicator(chargeIndicator);
+
+        // Amount
+        if (dto.getAllowanceChargeCbcAmount() != null) {
+            AmountType amt = new AmountType();
+            amt.setValue(new BigDecimal(dto.getAllowanceChargeCbcAmount()));
+            amt.setCurrencyID(dto.getBaseAmountCbcCurrencyId());
+            charge.setAmount(amt);
+        }
+
+        // BaseAmount
+        if (dto.getAllowanceChargeCbcBaseAmount() != null) {
+            BaseAmountType base = new BaseAmountType();
+            base.setValue(new BigDecimal(dto.getAllowanceChargeCbcBaseAmount()));
+            base.setCurrencyID(dto.getBaseAmountCbcCurrencyId() != null ? dto.getBaseAmountCbcCurrencyId() : "EUR");
+            charge.setBaseAmount(base);
+        }
+
+        // Reason
+        if (dto.getAllowanceChargeReason() != null) {
+            AllowanceChargeReasonType reason = new AllowanceChargeReasonType();
+            reason.setValue(dto.getAllowanceChargeReason());
+            charge.getAllowanceChargeReason().add(reason);
+        }
+
+        return Collections.singletonList(charge);
+    }
+
+
+    default List<PeriodType> toInvoicePeriodList(CsvInvoiceDto dto) {
+        if (dto.getInvoicePeriodCbcStartDate() == null && dto.getInvoicePeriodCbcEndDate() == null)
+            return Collections.emptyList();
+
+        PeriodType period = new PeriodType();
+        if (dto.getInvoicePeriodCbcStartDate() != null) {
+            StartDateType start = new StartDateType();
+            start.setValue(toXmlDate(dto.getInvoicePeriodCbcStartDate()));
+            period.setStartDate(start);
+        }
+
+        if (dto.getInvoicePeriodCbcEndDate() != null) {
+            EndDateType end = new EndDateType();
+            end.setValue(toXmlDate(dto.getInvoicePeriodCbcEndDate()));
+            period.setEndDate(end);
+        }
+
+        return Collections.singletonList(period);
+    }
+
+    default XMLGregorianCalendar toXmlDate(String value) {
+        if (value == null || value.trim().equalsIgnoreCase("value")) {
+            throw new RuntimeException("Invalid date: " + value);
+        }
         try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(dateStr);
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(value);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid date: " + dateStr, e);
+            throw new RuntimeException("Invalid date: " + value, e);
         }
     }
 }

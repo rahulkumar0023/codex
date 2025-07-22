@@ -3,7 +3,6 @@ package com.example.csvbatch.config;
 import com.example.csvbatch.model.CsvInvoiceDto;
 import com.example.csvbatch.processor.InvoiceProcessor;
 import com.example.csvbatch.writer.XmlInvoiceWriter;
-import lombok.RequiredArgsConstructor;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -21,7 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.nio.file.Path;
 
-import static com.example.csvbatch.CsvFieldNames.INVOICE_FIELDS;
+import static com.example.csvbatch.config.CsvFieldNames.INVOICE_FIELDS;
 
 @Configuration
 @EnableBatchProcessing

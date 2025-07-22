@@ -16,63 +16,56 @@ public class CsvInvoiceDto {
     private String dueDate;
     private String invoiceTypeCode;
     private String note;
-    private String documentCurrencyCode;
-    private String lineCountNumeric;
+    private String buyerReference;
+    private String startDate;
+    private String endDate;
+    private String contractDocumentReferenceCbcId;
 
-    private String supplierCompanyId;
-    private String supplierName;
-    private String supplierStreet;
-    private String supplierCity;
-    private String supplierPostal;
-    private String supplierCountryCode;
-    private String supplierVatId;
-    private String supplierLegalId;
-    private String supplierTelephone;
+    private String supplierEndPoint;
+    private String supplierPartyIdentificationCbcId;
+    private String supplierPartyNameCbcName;
+    private String supplierStreetName;
+    private String supplierAdditionalStreetName;
+    private String supplierCityName;
+    private String supplierPostalZone;
+    private String supplierCountrySubentity;
+    private String supplierAddressLineCbcLine;
+    private String supplierCountryCbcIdentificationCode;
 
-    private String customerCompanyId;
-    private String customerName;
-    private String customerStreet;
-    private String customerCity;
-    private String customerPostal;
-    private String customerCountryCode;
-    private String customerVatId;
-    private String customerLegalId;
+    private String customerEndPoint;
+    private String customerPartyIdentificationCbcId;
+    private String customerPartyNameCbcName;
+    private String customerStreetName;
+    private String customerAdditionalStreetName;
+    private String customerCityName;
+    private String customerPostalZone;
+    private String customerCountrySubentity;
+    private String customerAddressLineCbcLine;
+    private String customerCountryCbcIdentificationCode;
+    private String customerRegistrationName;
+
 
     private String paymentMeansCode;
-    private String paymentDueDate;
-    private String paymentId;
-    private String payeeAccountId;
-    private String payeeAccountName;
+    private String paymentMeansCbcPaymentId;
 
-    private String taxTotalAmount;
-    private String taxSubtotalTaxableAmount;
-    private String taxSubtotalTaxAmount;
-    private String taxSubtotalPercent;
-    private String taxCategoryID;
-    private String taxCategoryName;
-    private String taxCategoryPercent;
-    private String taxSchemeID;
+    private String legalMonetaryTotalCbcLineExtensionAmount;
+    private String legalMonetaryTotalCbcTaxExclusiveAmount;
+    private String legalMonetaryTotalCbcTaxInclusiveAmount;
+    private String legalMonetaryTotalCbcPayableAmount;
 
-    private String lineExtensionAmount;
-    private String taxExclusiveAmount;
-    private String taxInclusiveAmount;
-    private String payableAmount;
+    private String invoiceLineCbcId;
+    private String invoiceLineCbcInvoicedQuantity;
+    private String invoiceLineCbcLineExtensionAmount;
 
-    private String invoiceLineId;
-    private String invoiceLineUuid;
-    private String invoiceLineNote1;
-    private String invoiceLineNote2;
-    private String invoiceLineQuantity;
-    private String invoiceLineUnitCode;
-    private String invoiceLineLineExtensionAmount;
-    private String invoiceLineTaxAmount;
-    private String invoiceLineTaxableAmount;
-    private String invoiceLineTaxPercent;
-    private String invoiceLineTaxCategoryId;
-    private String invoiceLineTaxCategoryName;
-    private String invoiceLineTaxCategoryPercent;
-    private String invoiceLineTaxSchemeId;
-    private String invoiceLineItemName;
-    private String invoiceLineItemId;
-    private String invoiceLinePriceAmount;
+    private String currencyId;
+    private String itemCbcName;
+    private String invoicePeriodCbcStartDate;
+    private String invoicePeriodCbcEndDate;
+    private String descriptionCbcItem;
+
+    private String allowanceChargeCbcChargeIndicator;
+    private String allowanceChargeCbcAmount;
+    private String allowanceChargeCbcBaseAmount;
+    private String baseAmountCbcCurrencyId;
+    private String allowanceChargeReason;
 }
