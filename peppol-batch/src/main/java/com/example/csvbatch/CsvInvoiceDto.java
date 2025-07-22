@@ -1,4 +1,4 @@
-package com.example.csvbatch.model;
+package com.example.csvbatch;
 
 import lombok.Data;
 

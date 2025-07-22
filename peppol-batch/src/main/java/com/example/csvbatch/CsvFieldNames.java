@@ -1,4 +1,4 @@
-package com.example.csvbatch.config;
+package com.example.csvbatch;
 
 
 public class CsvFieldNames {

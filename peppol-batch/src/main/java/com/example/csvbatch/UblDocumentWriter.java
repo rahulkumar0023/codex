@@ -1,4 +1,4 @@
-package com.example.csvbatch.writer;
+package com.example.csvbatch;
 
 
 import jakarta.xml.bind.JAXBContext;

@@ -1,15 +1,12 @@
 package com.example.csvbatch;
 
 
-import com.example.csvbatch.config.BatchConfig;
-import com.example.csvbatch.mapper.CsvInvoiceMapper;
-import com.example.csvbatch.model.CsvInvoiceDto;
-import com.example.csvbatch.writer.XmlInvoiceWriter;
 import lombok.extern.slf4j.Slf4j;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,14 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CsvToXmlBatchTest {
 
     @Autowired
-    CsvInvoiceMapper mapper;
+    private MultiResourceItemReader<CsvInvoiceDto> reader;
 
     @Autowired
-    BatchConfig csvReaderConfig;
+    private CsvInvoiceMapper csvInvoiceMapper;
 
     @Test
     void shouldConvertCsvRowsToXmlFiles() throws Exception {
-        FlatFileItemReader<CsvInvoiceDto> reader = csvReaderConfig.reader();
         reader.open(new ExecutionContext());
 
         Path outputDir = Path.of("target/test-xml-out");
@@ -40,7 +36,7 @@ public class CsvToXmlBatchTest {
         CsvInvoiceDto dto;
         int count = 0;
         while ((dto = reader.read()) != null) {
-            InvoiceType invoice = mapper.toInvoiceType(dto);
+            InvoiceType invoice = csvInvoiceMapper.toInvoiceType(dto);
             Path outFile = outputDir.resolve(dto.getInvoiceNumber() + ".xml");
             writer.write(invoice, outFile);
             assertThat(Files.exists(outFile)).isTrue();

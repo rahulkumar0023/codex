@@ -1,9 +1,7 @@
-package com.example.csvbatch.mapper;
+package com.example.csvbatch;
 
-import com.example.csvbatch.model.CsvInvoiceDto;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import network.oxalis.peppol.ubl2.jaxb.cac.*;
-import network.oxalis.peppol.ubl2.jaxb.cac.LocationType;
 import network.oxalis.peppol.ubl2.jaxb.cbc.*;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;

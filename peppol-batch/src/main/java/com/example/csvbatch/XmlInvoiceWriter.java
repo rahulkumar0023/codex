@@ -1,4 +1,4 @@
-package com.example.csvbatch.writer;
+package com.example.csvbatch;
 
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.item.Chunk;

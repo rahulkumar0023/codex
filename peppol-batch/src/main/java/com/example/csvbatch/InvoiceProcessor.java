@@ -1,7 +1,5 @@
-package com.example.csvbatch.processor;
+package com.example.csvbatch;
 
-import com.example.csvbatch.mapper.CsvInvoiceMapper;
-import com.example.csvbatch.model.CsvInvoiceDto;
 import lombok.RequiredArgsConstructor;
 import network.oxalis.peppol.ubl2.jaxb.InvoiceType;
 import org.springframework.batch.item.ItemProcessor;
