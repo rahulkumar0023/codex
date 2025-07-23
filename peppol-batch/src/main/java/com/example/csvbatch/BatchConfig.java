@@ -7,18 +7,13 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.MultiResourceItemReader;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.nio.file.Path;
-
-import static com.example.csvbatch.CsvFieldNames.INVOICE_FIELDS;
 
 @Configuration
 @EnableBatchProcessing
@@ -37,7 +32,6 @@ public class BatchConfig {
 
         FileSystemResource[] inputFiles = new FileSystemResource[] {
                 new FileSystemResource("input/invoices.csv")
-                // Add more if needed
         };
         reader.setResources(inputFiles);
 

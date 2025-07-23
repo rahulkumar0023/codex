@@ -17,21 +17,15 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CsvInvoiceEndToEndTest {
-
     @Test
     void shouldConvertCsvToXmlFilesWithoutSpringContext() throws Exception {
-        // Setup CSV reader
-        CsvInvoiceReader delegate = new CsvInvoiceReader();
-        delegate.setResource(new FileSystemResource("src/test/resources/invoices.csv"));
-        delegate.afterPropertiesSet();
-
         MultiResourceItemReader<CsvInvoiceDto> reader = new MultiResourceItemReader<>();
-        reader.setDelegate(delegate);
-        reader.setResources(new Resource[]{new FileSystemResource("input/invoices.csv")});
-        //reader.afterPropertiesSet();
-        reader.open(new ExecutionContext());
+        reader.setResources(new Resource[] {
+                new FileSystemResource("input/invoices.csv")
+        });
 
-        // Setup mapper and writer
+        reader.setDelegate(new CsvInvoiceReader());
+        reader.open(new ExecutionContext());
 
         CsvInvoiceMapper mapper = Mappers.getMapper(CsvInvoiceMapper.class);
         Path outputDir = Path.of("target/test-invoice-xml");

@@ -3,36 +3,42 @@ package com.example.csvbatch;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DefaultFieldSetFactory;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.core.io.Resource;
 
-import static com.example.csvbatch.CsvFieldNames.INVOICE_FIELDS;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class CsvInvoiceReader extends FlatFileItemReader<CsvInvoiceDto>
         implements ResourceAwareItemReaderItemStream<CsvInvoiceDto> {
 
-    public CsvInvoiceReader() {
-        setLinesToSkip(1);
-        setName("csvInvoiceReader");
+    @Override
+    public void setResource(Resource resource) {
+        super.setResource(resource);
 
-        setLineMapper(createLineMapper());
-    }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+            String headerLine = reader.readLine();
+            if (headerLine == null) {
+                throw new IllegalStateException("CSV file has no header line: " + resource.getFilename());
+            }
 
-    private LineMapper<CsvInvoiceDto> createLineMapper() {
-        DefaultLineMapper<CsvInvoiceDto> lineMapper = new DefaultLineMapper<>();
+            String[] headerFields = headerLine.split(";");
+            setLinesToSkip(1);
+            setName("csvInvoiceReader");
 
-        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(";");
-        tokenizer.setNames(INVOICE_FIELDS); // Constant array of field names
-        tokenizer.setFieldSetFactory(new DefaultFieldSetFactory());
+            DefaultLineMapper<CsvInvoiceDto> lineMapper = new DefaultLineMapper<>();
+            DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(";");
+            tokenizer.setNames(headerFields);
+            tokenizer.setStrict(false);
+            lineMapper.setLineTokenizer(tokenizer);
+            lineMapper.setFieldSetMapper(new SmartCsvInvoiceFieldSetMapper());
 
-        BeanWrapperFieldSetMapper<CsvInvoiceDto> mapper = new BeanWrapperFieldSetMapper<>();
-        mapper.setTargetType(CsvInvoiceDto.class);
-
-        lineMapper.setLineTokenizer(tokenizer);
-        lineMapper.setFieldSetMapper(mapper);
-
-        return lineMapper;
+            setLineMapper(lineMapper);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize CsvInvoiceReader for " + resource.getFilename(), e);
+        }
     }
 }
